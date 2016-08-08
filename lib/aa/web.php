@@ -6,17 +6,14 @@ class AA {
 		define('AA_APP_ROOT',$appDir.'/');
 		define('AA_CONF_FILE',$configFile);
 		spl_autoload_register(array('AA','AAloader'));
-		self::set();
-		self::check();
+		Aapp::set(1);
+		Aapp::check(1);
 		Aapp::want($_SERVER['REQUEST_URI']);
+		$ctr='Cindex';
+		$act='index';
+		$ctr::$act();
 	}
 
-	public static function set() {
-
-	}
-	public static function check() {
-
-	}
 	public static function AAloader($className) {
 		switch ($className{0}) {
 			case 'A':{

@@ -1,6 +1,10 @@
 <?php
 class Bapp {
-	public static $ctrTable,$ctrRule;
+	public static function set($config) {
+	}
+	public static function check($item) {
+
+	}
 	public function user() {
 		return [
 			'id'	=>1,
@@ -8,10 +12,11 @@ class Bapp {
 			'groupId'=>1,
 		];
 	}
-	public function want($request) {
-		print_r(static::$ctrTable);die;
+	public function want() {
 		return [
-			'id','name','age',
-			];
+			'id',
+			'',
+			'age',
+		];
 	}
 }
