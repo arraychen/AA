@@ -12,7 +12,8 @@ class Bapp {
 			'groupId'=>1,
 		];
 	}
-	public function want() {
+	public function route() {
+
 		return [
 			'id',
 			'',

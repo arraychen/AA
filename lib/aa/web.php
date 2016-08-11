@@ -8,7 +8,7 @@ class AA {
 		spl_autoload_register(array('AA','AAloader'));
 		Aapp::set(1);
 		Aapp::check(1);
-		Aapp::want($_SERVER['REQUEST_URI']);
+		Aapp::route($_SERVER['REQUEST_URI']);
 		$ctr='Cindex';
 		$act='index';
 		$ctr::$act();
