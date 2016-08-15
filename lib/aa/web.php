@@ -6,12 +6,9 @@ class AA {
 		define('AA_APP_ROOT',$appDir.'/');
 		define('AA_CONF_FILE',$configFile);
 		spl_autoload_register(array('AA','AAloader'));
-		Aapp::set(1);
-		Aapp::check(1);
+		Aapp::set();
+		Aapp::check();
 		Aapp::route($_SERVER['REQUEST_URI']);
-		$ctr='Cindex';
-		$act='index';
-		$ctr::$act();
 	}
 
 	public static function AAloader($className) {
@@ -33,8 +30,8 @@ class AA {
 				$inClass=[
 					'Bapp'=>'core/app',
 					'Bmod'=>'core/mod',
+					'Bctr'=>'core/ctr',
 					'Bfun'=>'web/fun',
-					'Bctr'=>'web/ctr',
 					'Btpl'=>'web/tpl',
 				];
 				if(isset($inClass[$className])) {

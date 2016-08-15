@@ -5,4 +5,7 @@ class Cindex extends Actr {
 		$fiels=Muser::fields();
 		print_r($fiels);
 	}
+	public static function login() {
+		echo 'login';
+	}
 }
