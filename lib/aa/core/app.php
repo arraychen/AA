@@ -24,22 +24,27 @@ class Bapp {
 			$ctrTable=static::$ctrTable;
 			$tmp=explode('/',$tmp[0]);
 			unset($tmp[0]);
+			$last=end($tmp);
+			if ($last) {
+				$act=$last;
+			}
 
 			foreach ($tmp as $val) {
-				if(isset($ctrTable[$val])) {
-					if(is_array($ctrTable[$val])) {
-						$ctrTable=$ctrTable[$val];
-						$subDir.='/'.$val;
-					} elseif($ctrTable[$val]) {
-						$ctr='C'.$val;
+					if(isset($ctrTable[$val])) {
+						if(is_array($ctrTable[$val])) {
+							$ctrTable=$ctrTable[$val];
+							$subDir.='/'.$val;
+						} else {
+							$ctr='C'.$val;
+							break;
+						}
+					} else {
+						$act='404';
 					}
-				} else {
-					$act=$val;
-				}
 			}
 		}
-		static::$ctrName=$ctr;
-		static::$actName=$act;
+//		static::$ctrName=$ctr;
+//		static::$actName=$act;
 		echo $subDir.'/'.$ctr,'->',$act;
 		//$ctr::$act();
 	}
