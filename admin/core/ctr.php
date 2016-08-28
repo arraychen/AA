@@ -1,8 +1,9 @@
 <?php
 class Actr {
-	public function fields() {
-		return [
-			'id','name','age',
-			];
+	public function http403() {
+		echo 'page:403';
+	}
+	public function http404() {
+		echo 'page:404';
 	}
 }

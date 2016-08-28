@@ -1,6 +1,7 @@
 <?php
 
 class AA {
+	public static $ctrDir='';
 	public static function run($appDir,$configFile) {
 		define('AA_ROOT',__DIR__);
 		define('AA_APP_ROOT',$appDir.'/');
@@ -41,7 +42,7 @@ class AA {
 			}
 			case 'C':{
 				$fileName=substr($className,1);
-				include AA_APP_ROOT.'ctr/'.$fileName.'.php';
+				include AA_APP_ROOT.'ctr/'.Aapp::$ctrDir.$fileName.'.php';
 				break;
 			}
 			case 'M':{
