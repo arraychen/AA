@@ -59,10 +59,16 @@ class Bapp {
 				}
 			}
 		}
+		echo 'route:',$subDir.$ctr,'->',$act,PHP_EOL;
+		static::$ctrDir=$subDir;
+		if(class_exists($ctr) && method_exists($ctr,$act)) {
+		} else {
+			$ctr='Cindex';
+			$act='http404';
+		}
 		static::$CTR=$ctr;
 		static::$ACT=$act;
-		static::$ctrDir=$subDir;
-		echo 'route:',$subDir.$ctr,'->',$act,PHP_EOL;
+		static::$REQ=$parm;
 		$ctr::$act();
 	}
 }
