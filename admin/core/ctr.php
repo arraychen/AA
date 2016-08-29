@@ -1,5 +1,5 @@
 <?php
-class Actr {
+class Actr extends Bctr {
 	public function http403() {
 		echo 'page:403';
 	}
