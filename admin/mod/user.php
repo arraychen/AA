@@ -1,6 +1,6 @@
 <?php
 class Muser extends Amod {
-	public function fields() {
+	public static function fields() {
 		return [
 			'id','name','age',
 			];

@@ -1,5 +1,5 @@
 <?php
-class Amod {
+class Btpl {
 	public function field() {
 		return [
 			'id','name','age',

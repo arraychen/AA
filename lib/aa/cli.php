@@ -1,5 +1,5 @@
 <?php
-class AA {
+class AC {
 	public static function init($appDir,$configFile)
 	{
 		define('AA_ROOT',__DIR__);

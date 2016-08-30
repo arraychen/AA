@@ -17,7 +17,7 @@ class Bapp {
 			'groupId'=>1,
 		];
 	}
-	public function route($reqUri) {
+	public static function route($reqUri) {
 		$tmp=explode('?',$reqUri,2);
 		$subDir='';
 		$ctr='Cindex';
