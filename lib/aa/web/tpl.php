@@ -1,6 +1,6 @@
 <?php
 class Btpl {
-	public function field() {
+	public static function render() {
 		return [
 			'id','name','age',
 			];

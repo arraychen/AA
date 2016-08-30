@@ -1,7 +1,7 @@
 <?php
 
 class AA {
-	public static $ctrDir='';
+	public static $ctrSubDir='';
 	public static function run($appDir,$configFile) {
 		define('AA_ROOT',__DIR__);
 		define('AA_APP_ROOT',$appDir.'/');
@@ -41,13 +41,11 @@ class AA {
 				break;
 			}
 			case 'C':{
-				$fileName=substr($className,1);
-				include AA_APP_ROOT.'ctr/'.Aapp::$ctrDir.$fileName.'.php';
+				include AA_APP_ROOT.'ctr/'.Aapp::$ctrSubDir.substr($className,1).'.php';
 				break;
 			}
 			case 'M':{
-				$fileName=substr($className,1);
-				include AA_APP_ROOT.'mod/'.$fileName.'.php';
+				include AA_APP_ROOT.'mod/'.substr($className,1).'.php';
 				break;
 			}
 		}

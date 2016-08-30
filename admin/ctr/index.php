@@ -1,6 +1,6 @@
 <?php
 
-class Cindex extends Actr {
+class Cindex extends Bctr {
 	public static function index() {
 		$fiels=Muser::fields();
 		print_r($fiels);
