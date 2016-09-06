@@ -27,7 +27,8 @@ class Bapp {
 			$ctrTable=static::$ctrTable;
 			$tmp=explode('/',$tmp[0]);
 			unset($tmp[0]);
-			$node=0; // 0=root,1=dir,2=ctr,3=act,4=param
+			$node=0;
+			// 0=root,1=dir,2=ctr,3=act,4=param
 			foreach ($tmp as $val) {
 				if ($node==3) {
 					$actParam[]=$val;
