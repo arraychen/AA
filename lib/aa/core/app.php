@@ -73,9 +73,7 @@ class Bapp {
 		}
 		echo 'route:',$subDir.$ctr,'->',$act,PHP_EOL;
 		static::$ctrSubDir=$subDir;
-		if (class_exists($ctr)&&method_exists($ctr,$act)) {
-		}
-		else {
+		if (!class_exists($ctr) || !method_exists($ctr,$act)) {
 			$ctr='Cindex';
 			$act='httpCode';
 			$actParam[0]='404';

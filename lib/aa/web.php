@@ -15,6 +15,7 @@ class AA {
 	public static function AAloader($className) {
 		switch ($className{0}) {
 			case 'A':{
+				//app实例核心类
 				$inClass=[
 					'Aapp'=>'app',
 					'Amod'=>'mod',
@@ -28,6 +29,7 @@ class AA {
 				break;
 			}
 			case 'B':{
+				//框架核心类
 				$inClass=[
 					'Bapp'=>'core/app',
 					'Bmod'=>'core/mod',
@@ -41,10 +43,12 @@ class AA {
 				break;
 			}
 			case 'C':{
-				include AA_APP_ROOT.'ctr/'.Aapp::$ctrSubDir.substr($className,1).'.php';
+				//应用控制器
+				include AA_APP_ROOT.'ctr/'.Aapp::$ctrSubDir.strtolower(substr($className,1)).'.php';
 				break;
 			}
 			case 'M':{
+				//应用数据模型
 				include AA_APP_ROOT.'mod/'.substr($className,1).'.php';
 				break;
 			}
