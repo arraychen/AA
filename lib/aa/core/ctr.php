@@ -10,6 +10,11 @@ class Bctr {
 
 	}
 	public static function httpCode($code) {
-		echo 'page:',$code[0];
+		$htmlData=[
+			'tile'=>'http:',
+			'header'=>'Status Code: '.$code[0],
+			'body'=>'page:'.$code[0],
+		];
+		Atpl::show($htmlData);
 	}
 }

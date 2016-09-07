@@ -1,9 +1,7 @@
 <?php
 class Btpl {
-	public static function render() {
-		return [
-			'id','name','age',
-			];
+	public static function show($data) {
+		echo $data;
 	}
 	public function rule() {
 		return [
