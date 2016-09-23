@@ -7,5 +7,5 @@
  * Time: 17:05
  */
 class Atpl extends Btpl {
-
+	public static $layout='login';
 }
