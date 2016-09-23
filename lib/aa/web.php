@@ -11,7 +11,6 @@ class AA {
 		Aapp::check();
 		Aapp::route($_SERVER['REQUEST_URI']);
 	}
-
 	public static function AAloader($className) {
 		switch ($className{0}) {
 			case 'A':{
