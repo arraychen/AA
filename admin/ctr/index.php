@@ -1,11 +1,11 @@
 <?php
 
-class Cindex extends Bctr {
+class cIndex extends bCtr {
 	public static function index() {
-		$fiels=Muser::fields();
+		$fiels=mUser::fields();
 		print_r($fiels);
 	}
-	public static function Alogin() {
+	public static function aLogin() {
 		echo 'login';
 	}
 }

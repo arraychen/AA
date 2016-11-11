@@ -1,4 +1,4 @@
 <?php
-class Actr extends Bctr {
+class aCtr extends bCtr {
 
 }

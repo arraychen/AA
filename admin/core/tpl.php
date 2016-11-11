@@ -6,6 +6,6 @@
  * Date: 2016-09-07
  * Time: 17:05
  */
-class Atpl extends Btpl {
+class aTpl extends bTpl {
 	public static $layout='login';
 }

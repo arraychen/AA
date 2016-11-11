@@ -1,5 +1,5 @@
 <?php
-class Bmod {
+class bMod {
 	public function field() {
 		return [
 			'id','name','age',

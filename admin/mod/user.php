@@ -1,5 +1,5 @@
 <?php
-class Muser extends Amod {
+class mUser extends aMod {
 	public static function fields() {
 		return [
 			'id','name','age',

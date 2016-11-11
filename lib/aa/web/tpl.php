@@ -1,5 +1,5 @@
 <?php
-class Btpl {
+class bTpl {
 	public static $layout;
 	public static function show($data) {
 		echo $data;

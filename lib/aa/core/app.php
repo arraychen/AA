@@ -1,6 +1,6 @@
 <?php
 
-class Bapp {
+class bApp {
 	public static $CTR;
 	public static $ctrSubDir;
 	public static $ACT;
@@ -20,7 +20,7 @@ class Bapp {
 	public static function route($reqUri) {
 		$tmp=explode('?',$reqUri,2);
 		$subDir='';
-		$ctr='Cindex';
+		$ctr='cIndex';
 		$act='index';
 		$actParam=[];
 		if (isset($tmp[0])) {
@@ -41,7 +41,7 @@ class Bapp {
 							$node=1;
 						}
 						else {
-							$ctr='C'.$val;
+							$ctr='c'.$val;
 							$node=2;
 						}
 					}
@@ -56,7 +56,7 @@ class Bapp {
 						}
 						elseif (2==$node) {
 							if ($val)
-								$act='A'.$val;
+								$act='a'.$val;
 							$node=3;
 						}
 						else {
@@ -74,7 +74,7 @@ class Bapp {
 		echo 'route:',$subDir.$ctr,'->',$act,PHP_EOL;
 		static::$ctrSubDir=$subDir;
 		if (!class_exists($ctr) || !method_exists($ctr,$act)) {
-			$ctr='Cindex';
+			$ctr='cIndex';
 			$act='httpCode';
 			$actParam[0]='404';
 		}

@@ -16,11 +16,11 @@ class AA {
 			case 'A':{
 				//app实例核心类
 				$inClass=[
-					'Aapp'=>'app',
-					'Amod'=>'mod',
-					'Actr'=>'ctr',
-					'Atpl'=>'tpl',
-					'Afun'=>'fun',
+					'aApp'=>'app',
+					'aMod'=>'mod',
+					'aCtr'=>'ctr',
+					'aTpl'=>'tpl',
+					'aFun'=>'fun',
 				];
 				if(isset($inClass[$className])) {
 					include AA_APP_ROOT.'core/'.$inClass[$className].'.php';
@@ -30,11 +30,11 @@ class AA {
 			case 'B':{
 				//框架核心类
 				$inClass=[
-					'Bapp'=>'core/app',
-					'Bmod'=>'core/mod',
-					'Bctr'=>'core/ctr',
-					'Bfun'=>'web/fun',
-					'Btpl'=>'web/tpl',
+					'bApp'=>'core/app',
+					'bMod'=>'core/mod',
+					'bCtr'=>'core/ctr',
+					'bFun'=>'web/fun',
+					'bTpl'=>'web/tpl',
 				];
 				if(isset($inClass[$className])) {
 					include AA_ROOT.'/'.$inClass[$className].'.php';

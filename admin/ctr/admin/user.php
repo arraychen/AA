@@ -1,11 +1,11 @@
 <?php
 
-class Cuser extends Actr {
+class cUser extends aCtr {
 	public static function index() {
-		$fiels=Muser::fields();
+		$fiels=mUser::fields();
 		print_r($fiels);
 	}
-	public static function Alogin() {
+	public static function aLogin() {
 		echo 'login';
 	}
 }

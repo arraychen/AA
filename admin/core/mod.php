@@ -1,5 +1,5 @@
 <?php
-class Amod extends Bmod{
+class aMod extends bMod{
 	public function field() {
 		return [
 			'id','name','age',

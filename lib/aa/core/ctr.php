@@ -1,5 +1,5 @@
 <?php
-class Bctr {
+class bCtr {
 	public static function before() {
 
 	}
@@ -15,6 +15,6 @@ class Bctr {
 			'header'=>'Status Code: '.$code[0],
 			'body'=>'page:'.$code[0],
 		];
-		Atpl::show($htmlData);
+		aTpl::show($htmlData);
 	}
 }
