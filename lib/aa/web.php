@@ -7,13 +7,13 @@ class AA {
 		define('AA_APP_ROOT',$appDir.'/');
 		define('AA_CONF_FILE',$configFile);
 		spl_autoload_register(array('AA','AAloader'));
-		Aapp::set();
-		Aapp::check();
-		Aapp::route($_SERVER['REQUEST_URI']);
+		aApp::set();
+		aApp::check();
+		aApp::route($_SERVER['REQUEST_URI']);
 	}
 	public static function AAloader($className) {
 		switch ($className{0}) {
-			case 'A':{
+			case 'a':{
 				//app实例核心类
 				$inClass=[
 					'aApp'=>'app',
@@ -27,7 +27,7 @@ class AA {
 				}
 				break;
 			}
-			case 'B':{
+			case 'b':{
 				//框架核心类
 				$inClass=[
 					'bApp'=>'core/app',
@@ -41,12 +41,12 @@ class AA {
 				}
 				break;
 			}
-			case 'C':{
+			case 'c':{
 				//应用控制器
 				include AA_APP_ROOT.'ctr/'.Aapp::$ctrSubDir.strtolower(substr($className,1)).'.php';
 				break;
 			}
-			case 'M':{
+			case 'm':{
 				//应用数据模型
 				include AA_APP_ROOT.'mod/'.substr($className,1).'.php';
 				break;
