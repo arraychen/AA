@@ -3,7 +3,7 @@
 class AA {
 	public static $ctrSubDir='';
 	public static function run($appDir,$configFile) {
-		define('AA_ROOT',__DIR__);
+		define('AA_ROOT',__DIR__.'/class');
 		define('AA_APP_ROOT',$appDir.'/');
 		define('AA_CONF_FILE',$configFile);
 		spl_autoload_register(array('AA','AAloader'));
@@ -33,7 +33,7 @@ class AA {
 					'bApp'=>'core/app',
 					'bMod'=>'core/mod',
 					'bCtr'=>'core/ctr',
-					'bFun'=>'web/fun',
+					'bFun'=>'core/fun',
 					'bTpl'=>'web/tpl',
 				];
 				if(isset($inClass[$className])) {

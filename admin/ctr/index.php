@@ -3,7 +3,7 @@
 class cIndex extends bCtr {
 	public static function index() {
 		$fiels=mUser::fields();
-		print_r($fiels);
+		bFun::htmlpr($fiels);
 	}
 	public static function aLogin() {
 		echo 'login';
