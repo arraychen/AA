@@ -6,6 +6,6 @@ class cUser extends aCtr {
 		print_r($fiels);
 	}
 	public static function aLogin() {
-		echo 'login';
+		echo 'loginadmin';
 	}
 }
