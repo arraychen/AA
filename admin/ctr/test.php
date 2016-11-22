@@ -2,6 +2,6 @@
 
 class cTest extends bCtr {
 	public static function aLogin() {
-		echo 'login111';
+		echo '<hr>login111';
 	}
 }

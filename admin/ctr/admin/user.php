@@ -1,11 +1,13 @@
 <?php
 
-class cUser extends aCtr {
+namespace admin;
+
+class cUser extends \aCtr {
 	public static function index() {
-		$fiels=mUser::fields();
-		print_r($fiels);
+		echo __METHOD__;
+//		print_r($fiels);
 	}
 	public static function aLogin() {
-		echo 'loginadmin';
+		echo '<hr>loginadmin';
 	}
 }

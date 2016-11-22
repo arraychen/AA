@@ -1,14 +1,11 @@
 <?php
 
-class cIndex extends bCtr {
+class cIndex extends \bCtr {
 	public static function index() {
-		$a=mUser::solo();
-		$a->test='a';
-		$b=mUser::solo();
-		$fiels=mUser::fields();
-		echo $b->test;
-		bFun::vd($fiels);
-		cUser::aLogin();
+		//$a=mUser::solo();
+    echo 'index';
+		admin\cUser::aLogin();
+    //cTest::aLogin();
 	}
 	public static function aLogin() {
 		echo 'login';

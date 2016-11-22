@@ -2,7 +2,6 @@
 
 class bApp {
 	public static $CTR;
-	public static $ctrSubDir;
 	public static $ACT;
 	public static $USER;
 	public static $ctrTable;
@@ -27,8 +26,7 @@ class bApp {
 			$ctrTable=static::$ctrTable;
 			$tmp=explode('/',$tmp[0]);
 			unset($tmp[0]);
-			$node=0;
-			// 0=root,1=dir,2=ctr,3=act,4=param
+			$node=0; // 0=root,1=dir,2=ctr,3=act,4=param
 			foreach ($tmp as $val) {
 				if ($node==3) {
 					$actParam[]=$val;
@@ -36,30 +34,28 @@ class bApp {
 				else {
 					if (isset($ctrTable[$val])) {
 						if (is_array($ctrTable[$val])) {
-							$subDir.=$val.'/';
+							$subDir.=$val.'\\';
 							$ctrTable=$ctrTable[$val];
 							$node=1;
-						}
-						else {
+						} else {
 							$ctr='c'.$val;
 							$node=2;
 						}
 					}
 					else {
 						if (1==$node) {
-							if ($val) {
+							//if ($val) {
 								$subDir='';
 								$act='httpCode';
 								$actParam[0]='404';
-							}
+							//}
 							break;
 						}
 						elseif (2==$node) {
 							if ($val)
 								$act='a'.$val;
 							$node=3;
-						}
-						else {
+						} else {
 							$subDir='';
 							if ($val) {
 								$act='httpCode';
@@ -71,15 +67,19 @@ class bApp {
 				}
 			}
 		}
-		echo 'route:',$subDir.$ctr,'->',$act,PHP_EOL;
-		static::$ctrSubDir=$subDir;
-		if (!class_exists($ctr) || !method_exists($ctr,$act)) {
-			$ctr='cIndex';
+    echo '[',$subDir,']';
+    $ctrFullName=$subDir.$ctr;
+
+		echo 'route:',$ctrFullName,'->',$act,PHP_EOL;
+		if (!class_exists($ctrFullName) || !method_exists($ctrFullName,$act)) {
+      $ctrFullName='cIndex';
 			$act='httpCode';
 			$actParam[0]='404';
 		}
-		static::$CTR=$ctr;
+
+
+		static::$CTR=$ctrFullName;
 		static::$ACT=$act;
-		$ctr::$act($actParam);
+		$ctrFullName::$act($actParam);
 	}
 }

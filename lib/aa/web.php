@@ -1,7 +1,6 @@
 <?php
 
 class AA {
-	public static $ctrSubDir='';
 	public static function run($appDir,$configFile) {
 		define('AA_ROOT',__DIR__.'/class');
 		define('AA_APP_ROOT',$appDir.'/');
@@ -12,7 +11,10 @@ class AA {
 		aApp::route($_SERVER['REQUEST_URI']);
 	}
 	public static function AAloader($className) {
-		switch ($className{0}) {
+    $classArr=explode('\\',$className);
+    $className=array_pop($classArr);
+    $nameSpaceDir=join('/',$classArr).'/';
+    switch ($className{0}) {
 			case 'a':{
 				//app实例核心类
 				$inClass=[
@@ -43,7 +45,7 @@ class AA {
 			}
 			case 'c':{
 				//应用控制器
-				include AA_APP_ROOT.'ctr/'.Aapp::$ctrSubDir.strtolower(substr($className,1)).'.php';
+				include AA_APP_ROOT.'ctr/'.$nameSpaceDir.strtolower(substr($className,1)).'.php';
 				break;
 			}
 			case 'm':{
