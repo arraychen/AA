@@ -8,6 +8,6 @@ class cUser extends \aCtr {
 //		print_r($fiels);
 	}
 	public static function aLogin() {
-		echo '<hr>loginadmin';
+		echo '<hr><a>loginadmin';
 	}
 }
