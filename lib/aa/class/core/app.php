@@ -38,17 +38,20 @@ class bApp {
 				} else {
 					if (isset($ctrTable[$val])) {
 						if (is_array($ctrTable[$val])) {
+							//进入目录
+							$ctrTable=$ctrTable[$val];
 							$subDir.=$val.'/';
 							$ctrNameSpace.=$val.'\\';
-							$ctrTable=$ctrTable[$val];
 							$node=1;
 						} else {
-							//$ctr='c'.$val;
-							$act='index';
+							//判定是ctr
+							$ctr='c'.$val;
+
 							$node=3;
 							$error=0;
 						}
 					} else {
+						$act='a'.$val;
 						break;
 					}
 				}
@@ -56,6 +59,7 @@ class bApp {
 		}
 		$ctrFullName=$ctrNameSpace.$ctr;
 		echo '[route:dir="',$subDir,'" ctr="',$ctr,'" call="',$ctrFullName,'::',$act,'(',join(',',$actParam),')"]',PHP_EOL;
+		return;
 		if($error) {
 			if (0==$node) {
 				$str=$ctrFullName.' no in ctr table';
