@@ -3,7 +3,7 @@
 namespace admin;
 
 class cUser extends \aCtr {
-	public static function index() {
+	public static function index1() {
 		echo __METHOD__;
 //		print_r($fiels);
 	}

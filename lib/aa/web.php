@@ -13,20 +13,10 @@ class AA {
 	public static function AAloader($className) {
     $classArr=explode('\\',$className);
     $className=array_pop($classArr);
-    $nameSpaceDir=join('/',$classArr).'/';
     switch ($className{0}) {
 			case 'a':{
 				//app实例核心类
-				$inClass=[
-					'aApp'=>'app',
-					'aMod'=>'mod',
-					'aCtr'=>'ctr',
-					'aTpl'=>'tpl',
-					'aFun'=>'fun',
-				];
-				if(isset($inClass[$className])) {
-					include AA_APP_ROOT.'core/'.$inClass[$className].'.php';
-				}
+				include AA_APP_ROOT.'core/'.substr($className,1).'.php';
 				break;
 			}
 			case 'b':{
@@ -37,6 +27,7 @@ class AA {
 					'bCtr'=>'core/ctr',
 					'bFun'=>'core/fun',
 					'bTpl'=>'web/tpl',
+					'bHttp'=>'web/http',
 				];
 				if(isset($inClass[$className])) {
 					include AA_ROOT.'/'.$inClass[$className].'.php';
@@ -45,7 +36,7 @@ class AA {
 			}
 			case 'c':{
 				//应用控制器
-				include AA_APP_ROOT.'ctr/'.$nameSpaceDir.strtolower(substr($className,1)).'.php';
+				include AA_APP_ROOT.'ctr/'.join('/',$classArr).'/'.strtolower(substr($className,1)).'.php';
 				break;
 			}
 			case 'm':{

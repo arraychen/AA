@@ -12,25 +12,28 @@ class bApp {
 
 	}
 	public function user() {
-		return ['id'=>1,'name'=>'user','groupId'=>1,];
+		return ['level'=>0,'name'=>'user','group'=>'web',];
 	}
 
 	public static function route($reqUri) {
-		$tmp=explode('?',$reqUri,2);
-		$subDir='';
-		$ctrNameSpace='';
+		$subDir=$ctrNameSpace='';
 		$ctr='cIndex';
 		$act='index';
 		$actParam=[];
+		$error=1;
+		$tmp=explode('?',$reqUri,2);
 		if (isset($tmp[0])) {
 			$ctrTable=static::$ctrTable;
 			$tmp=explode('/',$tmp[0]);
 			unset($tmp[0]);
-			$node=0; // 0=start,1=dir,2=ctr,3=act,4=param
+			$node=0; // 0=root,1=dir,2=ctr,3=act,4=param
 
 			foreach ($tmp as $val) {
 				if (!$val) continue;
-				if ($node==4) {
+				if (3==$node){
+					$act='a'.$val;
+					$node=4;
+				} elseif (4==$node) {
 					$actParam[]=$val;
 				} else {
 					if (isset($ctrTable[$val])) {
@@ -38,45 +41,37 @@ class bApp {
 							$subDir.=$val.'/';
 							$ctrNameSpace.=$val.'\\';
 							$ctrTable=$ctrTable[$val];
-							$act='httpCode';
 							$node=1;
 						} else {
-							$ctr='c'.$val;
+							//$ctr='c'.$val;
+							$act='index';
 							$node=3;
+							$error=0;
 						}
 					} else {
-						if (3==$node) {
-							$act='a'.$val;
-							$node=4;
-						} else {
-							$subDir=$ctrNameSpace='';
-							$act='httpCode';
-							$actParam[0]='404';
-							break;
-						}
+						break;
 					}
 				}
 			}
 		}
-		if($node==1) { //直接目录目录不存在
-			$subDir=$ctrNameSpace='';
-			$actParam=['404','ctr not found'];
+		$ctrFullName=$ctrNameSpace.$ctr;
+		echo '[route:dir="',$subDir,'" ctr="',$ctr,'" call="',$ctrFullName,'::',$act,'(',join(',',$actParam),')"]',PHP_EOL;
+		if($error) {
+			if (0==$node) {
+				$str=$ctrFullName.' no in ctr table';
+			} elseif(1==$node) { //目录不存在
+				$str='request a dir :'.$subDir.' no ctr';
+			} else {
+				if (!class_exists($ctrFullName) || !method_exists($ctrFullName,$act)) {
+					$str='class or action '.$ctrFullName.'::'.$act.'() not found';
+				}
+			}
+			bHttp::error(['404',$str]);
+		} else {
+			static::$CTR=$ctrFullName;
+			static::$ctrDir=$subDir;
+			static::$ACT=$act;
+			$ctrFullName::$act($actParam);
 		}
-
-    $ctrFullName=$ctrNameSpace.$ctr;
-
-		if (!class_exists($ctrFullName) || !method_exists($ctrFullName,$act)) {
-      $ctrFullName='cIndex';
-			$act='httpCode';
-			$subDir='';
-			$actParam=array('404','action not found');
-		}
-
-		echo '[route:dir=',$subDir,' namespace=',$ctrNameSpace,' ctrname=',$ctr,' call=',$ctrFullName,'::',$act,' parm=',join('|',$actParam),']',PHP_EOL;
-
-		static::$CTR=$ctrFullName;
-		static::$ctrDir=$subDir;
-		static::$ACT=$act;
-		$ctrFullName::$act($actParam);
 	}
 }
