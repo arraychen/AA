@@ -1,12 +1,9 @@
 <?php
 class bCtr {
-	public static function before() {
+	public static function onInit() {
 
 	}
-	public static function after() {
-
-	}
-	public static function auth() {
+	public static function onEnd() {
 
 	}
 }

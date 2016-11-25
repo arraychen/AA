@@ -1,5 +1,5 @@
 <?php
-class mUser extends bMod {
+class dUser extends aMod {
 	public static function fields() {
 		return [
 			'id','name','age',

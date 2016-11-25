@@ -8,4 +8,5 @@
  */
 class aTpl extends bTpl {
 	public static $layout='login';
+	public static $for='pc';
 }
