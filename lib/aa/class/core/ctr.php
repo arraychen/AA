@@ -1,6 +1,6 @@
 <?php
 class bCtr {
-	public static function onInit() {
+	public static function onLoad() {
 
 	}
 	public static function onEnd() {

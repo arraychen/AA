@@ -64,7 +64,7 @@ class bApp {
 			static::$ctrDir=$subDir;
 			static::$CTR=$ctrFullName;
 			static::$ACT=$act;
-			$ctrFullName::onInit();
+			$ctrFullName::onLoad();
 			$ctrFullName::$act($actParam);
 			$ctrFullName::onEnd();
 		}
