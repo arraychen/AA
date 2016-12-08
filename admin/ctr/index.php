@@ -6,7 +6,7 @@ class cIndex extends \bCtr {
 		//admin\cUser::aLogin();
     //cTest::aLogin();
 		echo '<p>this is index</p>class ctr:';
-		admin\dev\cTest::aLogin();
+		aTpl::$layout='pc';
 	}
 	public static function aLogin() {
 		echo 'login';
