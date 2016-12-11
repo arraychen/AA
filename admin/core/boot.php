@@ -7,3 +7,6 @@ class aApp extends bApp {
 		'logout'=>1,
 	];
 }
+class aCtr extends bCtr {}
+class aMod extends bMod {}
+class aTpl extends bTpl {}

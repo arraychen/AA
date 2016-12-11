@@ -1,6 +1,6 @@
 <?php
 class bData {
-	public function field() {
+	public static function field() {
 		return [
 			'id','name','age',
 			];

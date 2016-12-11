@@ -1,8 +1,7 @@
 <?php
 class bMod {
 	protected static $classInstance;
-	public $test;
-	public static function solo() {
+	public static function mod() {
 		$className=get_called_class();
 		if (empty(static::$classInstance[$className])) {
 			$obj=new $className;

@@ -6,6 +6,7 @@ class AA {
 		define('AA_APP_ROOT',$appDir.'/');
 		define('AA_CONF_FILE',$configFile);
 		spl_autoload_register(array('AA','AAloader'));
+		include AA_APP_ROOT.'core/boot.php';
 		aApp::httpRoute($_SERVER['REQUEST_URI']);
 	}
 	public static function AAloader($className) {
