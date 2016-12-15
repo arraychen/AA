@@ -3,7 +3,11 @@ class bTpl {
 	public static $layout;
 	public static $data;
 	public static function show($data) {
-	  bFun::pr($data);
+		
+	  bFun::printR($data);
+	}
+	public static function layout($data) {
+		bFun::printR($data);
 	}
 
 }

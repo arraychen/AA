@@ -11,7 +11,7 @@ class bApp {
 	public static function cliRoute($cmd) {
 		echo $cmd;//TODO 后续完善
 	}
-	public static function httpRoute($reqUri) {
+	public static function webRoute($reqUri) {
 		$subDir=$ctrNameSpace='';
 		$ctr='cIndex';
 		$act='index';
@@ -50,7 +50,7 @@ class bApp {
 			}
 		}
 		$ctrFullName=$ctrNameSpace.$ctr;
-		echo '[route:dir="',$subDir,'" ctr="',$ctr,'" call="',$ctrFullName,'::',$act,'(',join(',',$actParam),')"]',PHP_EOL;
+		echo '[route:dir="',$subDir,'" ctr="',$ctr,'" call="',$ctrFullName,'::',$act,'(',join(',',$actParam),')"]<hr>',PHP_EOL;
 
 		if (!class_exists($ctrFullName) || !method_exists($ctrFullName,$act)) {
 			$error='class or action '.$ctrFullName.'::'.$act.'() not found';

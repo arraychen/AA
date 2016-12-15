@@ -1,12 +1,12 @@
 <?php
 
-class cIndex extends \bCtr {
+class cIndex extends \aCtr {
 	public static function index() {
 		//$a=mUser::solo();
 		//admin\cUser::aLogin();
     //cTest::aLogin();
 		echo '<p>this is index</p>class ctr:';
-		aTpl::$layout='pc';
+		bTpl::$layout='pc';
 	}
 	public static function aLogin() {
 		echo 'login';
