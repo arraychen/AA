@@ -23,6 +23,7 @@ class AWeb {
 				$inClass=[
 					'bapp'=>'core/app',
 					'bmod'=>'core/mod',
+					'bdata'=>'core/data',
 					'bfun'=>'core/fun',
 					'bctr'=>'web/ctr',
 					'btpl'=>'web/tpl',
@@ -42,6 +43,11 @@ class AWeb {
 				break;
 			}
 			case 'd':{
+				//数据库类型
+				include AA_ROOT.'data/'.substr($className,1).'.php';
+				break;
+			}
+			case 'm':{
 				//应用数据模型
 				include AA_APP_ROOT.'mod/'.substr($className,1).'.php';
 				break;

@@ -64,9 +64,12 @@ class bApp {
 			static::$ctrDir=$subDir;
 			static::$CTR=$ctrFullName;
 			static::$ACT=$act;
+			$ctrFullName::startCatchEcho();
 			$ctrFullName::onLoad();
 			$ctrFullName::$act($actParam);
 			$ctrFullName::onEnd();
+			$ctrFullName::endCatchEcho();
+			bTpl::show($ctrFullName::getCtrEcho());
 		}
 	}
 }

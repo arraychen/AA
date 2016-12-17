@@ -1,6 +1,7 @@
 <?php
-class dUser extends bMod {
-	public static function fields() {
+class mUser extends bMod {
+	public static $setDefautDatai='mysqli';
+	public static function field() {
 		return [
 			'id'=>[],
 			'name'=>[],
