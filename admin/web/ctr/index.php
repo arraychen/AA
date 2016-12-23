@@ -13,4 +13,7 @@ class cIndex extends \aCtr {
 	public static function aLogin() {
 		echo 'login';
 	}
+	public static function aTest() {
+		echo 'test';
+	}
 }

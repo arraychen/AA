@@ -2,6 +2,7 @@
 
 class bApp {
 	public static $CTR;
+	public static $prefixDir='';
 	public static $ctrDir='';
 	public static $ACT;
 	public static $USER;
@@ -17,35 +18,37 @@ class bApp {
 		$act='index';
 		$actParam=[];
 		$tmp=explode('?',$reqUri,2);
-		if (isset($tmp[0])) {
-			$ctrTable=static::$ctrTable;
-			$tmp=explode('/',$tmp[0]);
-			unset($tmp[0]);
-			$node=0; // 0=root,1=dir,2=ctr,3=act,4=param
-			foreach ($tmp as $val) {
-				if (!$val) continue;
-				if (3==$node){
-					$act='a'.$val;
-					$node=4;
-				} elseif (4==$node) {
-					$actParam[]=$val;
-				} else {
-					if (isset($ctrTable[$val])) {
-						if (is_array($ctrTable[$val])) {
-							//进入目录
-							$ctrTable=$ctrTable[$val];
-							$subDir.=$val.'/';
-							$ctrNameSpace.=$val.'\\';
-							$node=1;
-						} else {
-							//判定是ctr
-							$ctr='c'.$val;
-							$node=3;
-						}
+		if(static::$prefixDir) {
+			$tmp=explode(static::$prefixDir,$tmp[0],2);
+			if (isset($tmp[1]))	$tmp[0]=$tmp[1];
+		}
+		$tmp=explode('/',$tmp[0]);
+		unset($tmp[0]);
+		$node=0; // 0=root,1=dir,2=ctr,3=act,4=param
+		$ctrTable=static::$ctrTable;
+		foreach ($tmp as $val) {
+			if (!$val) continue;
+			if (3==$node){
+				$act='a'.$val;
+				$node=4;
+			} elseif (4==$node) {
+				$actParam[]=$val;
+			} else {
+				if (isset($ctrTable[$val])) {
+					if (is_array($ctrTable[$val])) {
+						//进入目录
+						$ctrTable=$ctrTable[$val];
+						$subDir.=$val.'/';
+						$ctrNameSpace.=$val.'\\';
+						$node=1;
 					} else {
-						$act='a'.$val;
-						break;
+						//判定是ctr
+						$ctr='c'.$val;
+						$node=3;
 					}
+				} else {
+					$act='a'.$val;
+					break;
 				}
 			}
 		}
