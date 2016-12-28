@@ -9,10 +9,13 @@ class aApp extends bApp {
 	];
 }
 class aCtr extends bCtr {
+	public static function onStart() {
+	}
 	public static function onEnd() {
-		echo '<hr>';
+		echo '<hr size=1>included_files:<br>';
 		bFun::printR(get_included_files());
 	}
 }
 //class aMod extends bMod {}
 //class aTpl extends bTpl {}
+bTpl::$layout='pc';

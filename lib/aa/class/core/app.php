@@ -1,18 +1,23 @@
 <?php
 
 class bApp {
-	public static $CTR;
-	public static $prefixDir='';
-	public static $ctrDir='';
-	public static $ACT;
-	public static $USER;
-	public static $ctrTable;
+	public static $CTR; //控制器
+	public static $prefixDir='';//CTR前置子目录名
+	public static $ctrDir='';//ctr相对目录
+	public static $ACT; //行为名
+	public static $ctrTable; //控制器表
+	public static $dbConnect; //数据库链接
+	public static $echo; //输出字符
+
+	public static $USER; //用户信息
+
+	public static $autoTpl=1; //模板是否自动加载
 	public static function iniset() {
 	}
 	public static function cliRoute($cmd) {
 		echo $cmd;//TODO 后续完善
 	}
-	public static function webRoute($reqUri) {
+	final public static function webRoute($reqUri) {
 		$subDir=$ctrNameSpace='';
 		$ctr='cIndex';
 		$act='index';
@@ -53,7 +58,7 @@ class bApp {
 			}
 		}
 		$ctrFullName=$ctrNameSpace.$ctr;
-		echo '[route:dir="',$subDir,'" ctr="',$ctr,'" call="',$ctrFullName,'::',$act,'(',join(',',$actParam),')"]<hr>',PHP_EOL;
+		//echo '[route:dir="',$subDir,'" ctr="',$ctr,'" call="',$ctrFullName,'::',$act,'(',join(',',$actParam),')"]<hr size=1>',PHP_EOL;
 
 		if (!class_exists($ctrFullName) || !method_exists($ctrFullName,$act)) {
 			$error='class or action '.$ctrFullName.'::'.$act.'() not found';
@@ -67,12 +72,14 @@ class bApp {
 			static::$ctrDir=$subDir;
 			static::$CTR=$ctrFullName;
 			static::$ACT=$act;
-			$ctrFullName::startCatchEcho();
+			bCtr::startCatchEcho();
 			$ctrFullName::onLoad();
 			$ctrFullName::$act($actParam);
 			$ctrFullName::onEnd();
-			$ctrFullName::endCatchEcho();
-			bTpl::show($ctrFullName::getCtrEcho());
+			bCtr::endCatchEcho();
+			if (static::$autoTpl) {
+				bTpl::show(bCtr::$echo);
+			}
 		}
 	}
 }

@@ -1,17 +1,17 @@
 <?php
 class bCtr {
-	private static $ctrEcho;
+	public static $echo;
 	public static function onLoad() {}
 	public static function onEnd() {}
 
-	public static function startCatchEcho() {
+	final public static function startCatchEcho() {
 		ob_start();
 	}
-	public static function endCatchEcho() {
-		self::$ctrEcho=ob_get_contents();
+	final public static function endCatchEcho() {
+		self::$echo=ob_get_contents();
 		ob_end_clean();
 	}
-	public static function getCtrEcho() {
-		return self::$ctrEcho;
+	final public static function getEcho() {
+		return self::$echo;
 	}
 }
