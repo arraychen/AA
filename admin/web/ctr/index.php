@@ -7,6 +7,8 @@ class cIndex extends \aCtr {
     //cTest::aLogin();
 
 		echo '<p>this is index</p>class ctr:';
+		bTpl::$data['title']='首页';
+		bTpl::$data['menu']=[[1,'用户'],[2,'管理']];
 		//bTpl::show('aaa');
 	}
 	public static function aLogin() {

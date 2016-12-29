@@ -17,7 +17,7 @@ class bApp {
 	public static function cliRoute($cmd) {
 		echo $cmd;//TODO 后续完善
 	}
-	final public static function webRoute($reqUri) {
+	public static function webRoute($reqUri) {
 		$subDir=$ctrNameSpace='';
 		$ctr='cIndex';
 		$act='index';
@@ -69,16 +69,16 @@ class bApp {
 		if($error) {
 			bHttp::error(['404',$error]);
 		} else {
+			bCtr::startCatchEcho();
 			static::$ctrDir=$subDir;
 			static::$CTR=$ctrFullName;
 			static::$ACT=$act;
-			bCtr::startCatchEcho();
 			$ctrFullName::onLoad();
 			$ctrFullName::$act($actParam);
 			$ctrFullName::onEnd();
 			bCtr::endCatchEcho();
 			if (static::$autoTpl) {
-				bTpl::show(bCtr::$echo);
+				bTpl::show();
 			}
 		}
 	}

@@ -1,14 +1,19 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>网站标题</title>
+	<title>网站标题 <?php ek('title') ?></title>
 	<style>
 		* {
 			font-size:14px}
 	</style>
 </head>
 <body>
-这是首页
-<div style="padding:3px;border:1px solid #000000;width: 50%; background: lightslategrey"><?php echo bCtr::$echo; ?></div>
+菜单：
+<?php if($arr=gk('menu')) { foreach($arr as $val) { ?>
+<a href="<?php e($val[0]) ?>"><?php e($val[1]) ?></a>
+<?php }} else { ?>
+没有数据
+<?php } ?>
+<div id="aa_foot" style="margin: 4px;padding:4px;border:1px solid #999999;width: 50%; background: lightblue"><?php e(bCtr::$echo) ?></div>
 </body>
 </html>
