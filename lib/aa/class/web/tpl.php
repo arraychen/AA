@@ -8,7 +8,7 @@ function gk($key) {
 	else return [];
 }
 function e($str) {
-	if (isset($str)) echo $str;
+	echo $str;
 }
 class bTpl {
 	public static $layout;

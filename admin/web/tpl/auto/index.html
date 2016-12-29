@@ -9,10 +9,8 @@
 </head>
 <body>
 菜单：
-<?php if($arr=gk('menu')) { foreach($arr as $val) { ?>
+<?php foreach(gk('menu') as $val) { ?>
 <a href="<?php e($val[0]) ?>"><?php e($val[1]) ?></a>
-<?php }} else { ?>
-没有数据
 <?php } ?>
 <div id="aa_foot" style="margin: 4px;padding:4px;border:1px solid #999999;width: 50%; background: lightblue"><?php e(bCtr::$echo) ?></div>
 </body>
