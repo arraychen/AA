@@ -12,8 +12,10 @@ class aCtr extends bCtr {
 	public static function onStart() {
 	}
 	public static function onEnd() {
-		echo '<hr size=1>included_files:<br>';
-		bFun::printR(get_included_files());
+		echo '<hr size=1>included_files:';
+		foreach (get_included_files() as $id=>$file) {
+			echo '<br>',$id,' ',$file;
+		}
 	}
 }
 //class aMod extends bMod {}
