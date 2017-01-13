@@ -1,10 +1,11 @@
-<?php
-$title='首页';
-obs();
-?>
-<div id="aa_foot" style="margin: 4px;padding:4px;border:1px solid #999999;width: 50%; background: lightblue"><?php e(bCtr::$echo) ?></div>
-<?php $blockFoot=obe();?>
 菜单：
 <?php foreach(gk('menu') as $val) { ?>
 <a href="<?php e($val[0]) ?>"><?php e($val[1]) ?></a>
 <?php } ?>
+<?php
+obs();
+?>
+<div id="aa_foot" style="margin: 4px;padding:4px;border:1px solid #999999;width: 50%; background: lightblue"><?php e(bCtr::$echo) ?></div>
+<?php
+obe($blockFoot);
+?>

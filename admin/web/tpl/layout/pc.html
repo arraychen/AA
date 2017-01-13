@@ -1,10 +1,13 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>网站标题 <?php e($title) ?></title>
+    <title>网站标题 <?php ek('title') ?></title>
+    <style>
+        * {font-size: 14px}
+    </style>
 </head>
 <body>
-<?php echo $main ?>
-<?php echo $blockFoot ?>
+<?=$tplMain?>
+<?=$blockFoot?>
 </body>
 </html>

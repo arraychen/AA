@@ -12,9 +12,15 @@ function e($str) {
 }
 function obs() {ob_start();}
 function obe() {
-	$str=ob_get_contents();
-	ob_end_clean();
-	return $str;
+	return ob_get_clean();
+}
+function obi($file,&$var) {
+	ob_start();
+	include $file;
+	$var=ob_get_clean();
+}
+function obg($var) {
+	return $var;
 }
 
 class bTpl {
@@ -33,9 +39,9 @@ class bTpl {
 		}
 		if(file_exists($bTplFile)) {
 			if (self::$layout) {
-				obs();
+				ob_start();
 				include $bTplFile;
-				$main=obe();
+				$tplMain=ob_get_clean();
 				include AA_APP_ROOT.'web/tpl/layout/'.self::$layout.'.html';
 			} else include $bTplFile;
 		} else {
