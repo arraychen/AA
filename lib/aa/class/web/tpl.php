@@ -3,24 +3,21 @@
 function ek($key) {
 	if (isset(bTpl::$data[$key])) echo bTpl::$data[$key];
 }
-function gk($key) {
+function gk($key,$type='s') {
 	if (isset(bTpl::$data[$key])) return bTpl::$data[$key];
-	else return [];
+	else {
+		if ('a'==$type)  return [];
+		elseif ('o'==$type)  return new stdClass();
+		else  return '';
+	}
 }
-function e($str) {
-	echo $str;
-}
+function e($str) {	echo $str;}
 function obs() {ob_start();}
-function obe() {
-	return ob_get_clean();
-}
+function obe() {	return ob_get_clean();}
 function obi($file,&$var) {
 	ob_start();
 	include $file;
 	$var=ob_get_clean();
-}
-function obg($var) {
-	return $var;
 }
 
 class bTpl {
@@ -41,7 +38,7 @@ class bTpl {
 			if (self::$layout) {
 				ob_start();
 				include $bTplFile;
-				$tplMain=ob_get_clean();
+				$main=ob_get_clean();
 				include AA_APP_ROOT.'web/tpl/layout/'.self::$layout.'.html';
 			} else include $bTplFile;
 		} else {

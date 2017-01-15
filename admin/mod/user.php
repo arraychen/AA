@@ -1,7 +1,8 @@
 <?php
-class mCommon extends bMod {
-	public static $setDatai='mysqli';
-	public static function user() {
+class mUser extends bData {
+	public static $datai='mysqli';
+	public static $table='user';
+	public static function field() {
 		return [
 			'id'=>[],
 			'name'=>[],
