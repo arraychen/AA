@@ -1,11 +1,10 @@
 <?php
 
-class bSql {
-	public static function connet() {
-
+class mysqli extends bSql {
+	public static function connect() {
 	}
-	public static function table($name) {
-
+	public function table($name) {}
+	public function dataBase($name) {
 	}
 
 }

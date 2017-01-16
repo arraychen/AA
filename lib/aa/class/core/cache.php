@@ -1,17 +1,5 @@
 <?php
-class bMod {
-	public static $defautDatai='mysqli';
-	private static $allModInstance;
-	public static function mod() {
-		$className=get_called_class();
-		if (empty(self::$allModInstance[$className])) {
-			$obj=new $className;
-			self::$allModInstance[$className]=$obj;
-			return $obj;
-		} else {
-			return self::$allModInstance[$className];
-		}
-	}
+class bCache {
 	public function nameRule() {}
 	public function findRule() {}
 	public function setRule() {}

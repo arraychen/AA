@@ -1,8 +1,8 @@
 <?php
 
-function ek($key) {
-	if (isset(bTpl::$data[$key])) echo bTpl::$data[$key];
-}
+function e($str) {	echo $str;}
+function ek($key) {	if (isset(bTpl::$data[$key])) echo bTpl::$data[$key];}
+function eb($key) {	if (isset(bTpl::$block[$key])) echo bTpl::$block[$key];}
 function gk($key,$type='s') {
 	if (isset(bTpl::$data[$key])) return bTpl::$data[$key];
 	else {
@@ -11,9 +11,8 @@ function gk($key,$type='s') {
 		else  return '';
 	}
 }
-function e($str) {	echo $str;}
 function obs() {ob_start();}
-function obe() {	return ob_get_clean();}
+function obe($key) {bTpl::$block[$key]=ob_get_clean();}
 function obi($file,&$var) {
 	ob_start();
 	include $file;
@@ -24,6 +23,7 @@ class bTpl {
 	public static $layout='';
 	public static $tplName='';
 	public static $data=[];
+	public static $block=[];
 		public static function setData($data=[],$tplName='') {
 		static::$data=$data;
 			static::$tplName=$tplName;
@@ -52,7 +52,7 @@ class bTpl {
 		if (empty($data)) echo '';
 		else {
 			foreach ($data as $key => $value) {
-
+				echo $key,':',$value,PHP_EOL;
 			}
 		}
 	}

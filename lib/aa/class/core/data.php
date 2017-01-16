@@ -1,8 +1,11 @@
 <?php
 class bData {
-	public static $datai='mysqli';
 	private static $allModInstance;
 	private static $allDataBaseConnect;
+	public $datai='mysqli';
+	public $base;
+	public $count;
+	public $autoId;
 	public static function mod() {
 		$className=get_called_class();
 		if (empty(self::$allModInstance[$className])) {
@@ -28,6 +31,8 @@ class bData {
 	public function insert() {}
 	public function update() {}
 	public function delete() {}
-	public function select() {}
+	public function select() {
+
+	}
 	public function count() {}
 }

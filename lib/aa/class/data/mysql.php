@@ -1,6 +1,6 @@
 <?php
 
-class bSql {
+class mysql extends bSql {
 	public static function connet() {
 
 	}
