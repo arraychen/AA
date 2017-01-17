@@ -2,9 +2,10 @@
 
 class bApp {
 	public static $CTR; //控制器
+	public static $FULLCTR; //控制器（含命名空间）
 	public static $prefixDir='';//CTR前置子目录名
 	public static $ctrDir='';//ctr相对目录
-	public static $ACT; //行为名
+	public static $ACT;       //动作名
 	public static $ctrTable; //控制器表
 	public static $dbConnect; //数据库链接
 	public static $echo; //输出字符
@@ -71,7 +72,8 @@ class bApp {
 		} else {
 			bCtr::startCatchEcho();
 			static::$ctrDir=$subDir;
-			static::$CTR=$ctrFullName;
+			static::$CTR=$ctr;
+			static::$FULLCTR=$ctrFullName;
 			static::$ACT=$act;
 			$ctrFullName::onLoad();
 			$ctrFullName::$act($actParam);

@@ -30,9 +30,9 @@ class bTpl {
 	}
 	public static function show() {
 		if(static::$tplName) {
-			$bTplFile=AA_APP_ROOT.'web/tpl/page/'.bApp::$ctrDir.static::$tplName.'.html';
+			$bTplFile=AA_APP_ROOT.'web/tpl/page/'.strtolower(bApp::$ctrDir.static::$tplName).'.html';
 		} else {
-			$bTplFile=AA_APP_ROOT.'web/tpl/auto/'.bApp::$ctrDir.bApp::$ACT.'.html';
+			$bTplFile=AA_APP_ROOT.'web/tpl/auto/'.strtolower(bApp::$ctrDir.bApp::$CTR.'_'.bApp::$ACT).'.html';
 		}
 		if(file_exists($bTplFile)) {
 			if (self::$layout) {
