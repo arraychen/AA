@@ -3,6 +3,7 @@ class bData {
 	private static $allModInstance;
 	private static $allDataBaseConnect;
 	public $datai='mysqli';
+	public $server;
 	public $base;
 	public $count;
 	public $autoId;
@@ -28,11 +29,15 @@ class bData {
 	}
 	public function rule() {}
 	public function map() {}
+
+	public function getOne($) {}
+	public function getAll() {}
+
 	public function insert() {}
 	public function update() {}
 	public function delete() {}
-	public function select() {
-
-	}
+	public function select() {}
 	public function count() {}
+
+
 }

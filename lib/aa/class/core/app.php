@@ -1,19 +1,19 @@
 <?php
 
 class bApp {
-	public static $CTR; //控制器
-	public static $FULLCTR; //控制器（含命名空间）
+	public static $config;			//配置信息
+	public static $CTR;					//控制器
+	public static $FULLCTR;			//控制器（含命名空间）
 	public static $prefixDir='';//CTR前置子目录名
-	public static $ctrDir='';//ctr相对目录
-	public static $ACT;       //动作名
-	public static $ctrTable; //控制器表
-	public static $dbConnect; //数据库链接
-	public static $echo; //输出字符
+	public static $ctrDir='';		//ctr相对目录
+	public static $ACT;					//动作名
+	public static $ctrTable;		//控制器表
+	public static $echo;				//输出字符
+	public static $USER;				//用户信息
+	public static $autoTpl=1;		//模板是否自动加载
 
-	public static $USER; //用户信息
-
-	public static $autoTpl=1; //模板是否自动加载
-	public static function iniset() {
+	public static function loadConfig() {
+		static::$config=require(AA_CONF_FILE);
 	}
 	public static function cliRoute($cmd) {
 		echo $cmd;//TODO 后续完善

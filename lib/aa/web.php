@@ -1,11 +1,16 @@
 <?php
 
 class AWeb {
-	public static function run($appDir,$configFile) {
+	public static function run($appDir,$configFile='') {
 		define('AA_ROOT',__DIR__.'/class');
 		define('AA_APP_ROOT',$appDir.'/');
-		define('AA_CONF_FILE',$configFile);
+		if ($configFile) {
+			define('AA_CONF_FILE',$configFile);
+		} else {
+			define('AA_CONF_FILE',$appDir.'/config.php');
+		}
 		spl_autoload_register(array('AWeb','AAloader'));
+		aApp::loadConfig();
 		aApp::webRoute($_SERVER['REQUEST_URI']);
 	}
 	public static function AAloader($className) {
