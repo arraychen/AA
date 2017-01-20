@@ -11,6 +11,5 @@ class bSql {
 	public function update() {}
 	public function delete() {}
 	public function select() {}
-	public function count() {}
 	public function query() {}
 }
