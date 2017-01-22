@@ -13,7 +13,7 @@ class bApp {
 	public static $autoTpl=1;		//模板是否自动加载
 
 	public static function loadConfig() {
-		static::$config=require(AA_CONF_FILE);
+		self::$config=require(AA_CONF_FILE);
 	}
 	public static function cliRoute($cmd) {
 		echo $cmd;//TODO 后续完善
@@ -71,15 +71,15 @@ class bApp {
 			bHttp::error(['404',$error]);
 		} else {
 			bCtr::startCatchEcho();
-			static::$ctrDir=$subDir;
-			static::$CTR=$ctr;
-			static::$FULLCTR=$ctrFullName;
-			static::$ACT=$act;
+			self::$ctrDir=$subDir;
+			self::$CTR=$ctr;
+			self::$FULLCTR=$ctrFullName;
+			self::$ACT=$act;
 			$ctrFullName::onLoad();
 			$ctrFullName::$act($actParam);
 			$ctrFullName::onEnd();
 			bCtr::endCatchEcho();
-			if (static::$autoTpl) {
+			if (self::$autoTpl) {
 				bTpl::show();
 			}
 		}

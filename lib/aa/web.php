@@ -10,8 +10,8 @@ class AWeb {
 			define('AA_CONF_FILE',$appDir.'/config.php');
 		}
 		spl_autoload_register(array('AWeb','AAloader'));
-		aApp::loadConfig();
-		aApp::webRoute($_SERVER['REQUEST_URI']);
+		bApp::loadConfig();
+		bApp::webRoute($_SERVER['REQUEST_URI']);
 	}
 	public static function AAloader($className) {
     $nameSpace=explode('\\',$className);
@@ -29,6 +29,8 @@ class AWeb {
 					'bapp'=>'core/app',
 					'bmod'=>'core/mod',
 					'bdata'=>'core/data',
+					'bsql'=>'core/sql',
+					'bcache'=>'core/cache',
 					'bfun'=>'core/fun',
 					'bctr'=>'web/ctr',
 					'btpl'=>'web/tpl',
@@ -49,7 +51,7 @@ class AWeb {
 			}
 			case 'd':{
 				//数据库类型
-				include AA_ROOT.'data/'.substr($className,1).'.php';
+				include AA_ROOT.'/data/'.substr($className,1).'.php';
 				break;
 			}
 			case 'm':{
