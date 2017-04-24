@@ -30,16 +30,16 @@ class bTpl {
 	}
 	public static function show() {
 		if(static::$tplName) {
-			$bTplFile=AA_APP_ROOT.'web/tpl/page/'.strtolower(bApp::$ctrDir.static::$tplName).'.html';
+			$bTplFile=APP_ROOT.'web/tpl/page/'.strtolower(bApp::$ctrDir.static::$tplName).'.html';
 		} else {
-			$bTplFile=AA_APP_ROOT.'web/tpl/auto/'.strtolower(bApp::$ctrDir.bApp::$CTR.'_'.bApp::$ACT).'.html';
+			$bTplFile=APP_ROOT.'web/tpl/auto/'.strtolower(bApp::$ctrDir.bApp::$CTR.'_'.bApp::$ACT).'.html';
 		}
 		if(file_exists($bTplFile)) {
 			if (self::$layout) {
 				ob_start();
 				include $bTplFile;
 				$main=ob_get_clean();
-				include AA_APP_ROOT.'web/tpl/layout/'.self::$layout.'.html';
+				include APP_ROOT.'web/tpl/layout/'.self::$layout.'.html';
 			} else include $bTplFile;
 		} else {
 			bHttp::error(['404','tpl('.$bTplFile.') not found']);

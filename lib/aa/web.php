@@ -2,15 +2,14 @@
 
 class AWeb {
 	public static function run($appDir,$configFile='') {
-		define('AA_ROOT',__DIR__.'/class');
-		define('AA_APP_ROOT',$appDir.'/');
-		if ($configFile) {
-			define('AA_CONF_FILE',$configFile);
-		} else {
-			define('AA_CONF_FILE',$appDir.'/config.php');
+		define('AA_ROOT',__DIR__.'/class/');
+		define('APP_ROOT',$appDir.'/');
+		if (!$configFile) {
+			$configFile=$appDir.'/config.php';
 		}
 		spl_autoload_register(array('AWeb','AAloader'));
-		bApp::loadConfig();
+		include APP_ROOT.'core/init.php';
+		bApp::loadConfig($configFile);
 		bApp::webRoute($_SERVER['REQUEST_URI']);
 	}
 	public static function AAloader($className) {
@@ -18,9 +17,9 @@ class AWeb {
     $className=strtolower(array_pop($nameSpace));
     switch ($className{0}) {
 			case 'a':{
-				//app实例核心类
-				//include AA_APP_ROOT.'core/'.substr($className,1).'.php';
-				include AA_APP_ROOT.'core/aweb.php';
+				//app-web实例初始化
+				include APP_ROOT.'core/'.substr($className,1).'.php';
+				//include APP_ROOT.'core/init.php';
 				break;
 			}
 			case 'b':{
@@ -37,7 +36,7 @@ class AWeb {
 					'bhttp'=>'web/http',
 				];
 				if(isset($inClass[$className])) {
-					include AA_ROOT.'/'.$inClass[$className].'.php';
+					include AA_ROOT.$inClass[$className].'.php';
 				}
 				break;
 			}
@@ -46,21 +45,21 @@ class AWeb {
 				if ($nameSpace) {
 					$nameSpace=strtolower(join('/',$nameSpace)).'/';
 				} else $nameSpace='';
-				include AA_APP_ROOT.'web/ctr/'.$nameSpace.substr($className,1).'.php';
+				include APP_ROOT.'web/ctr/'.$nameSpace.substr($className,1).'.php';
 				break;
 			}
 			case 'd':{
 				//数据库类型
-				include AA_ROOT.'/data/'.substr($className,1).'.php';
+				include AA_ROOT.'data/'.substr($className,1).'.php';
 				break;
 			}
 			case 'm':{
 				//应用数据模型
-				include AA_APP_ROOT.'mod/'.substr($className,1).'.php';
+				include APP_ROOT.'mod/'.substr($className,1).'.php';
 				break;
 			}
 	    default: {
-		    require AA_APP_ROOT.'core/'.$className.'.php';
+		    require APP_ROOT.'core/'.$className.'.php';
 	    }
 		}
 	}

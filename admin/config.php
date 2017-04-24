@@ -1,8 +1,11 @@
 <?php
 return [
 	'php.ini'=>[],
-	'dataServer'=>[
-		'mysqli'=>['adminW'=>['host'=>'localhost','user'=>'php','passsword'=>'php','database'=>'admin']],
+	'data'=>[
+		'adminW'=>
+			['Mysqli',
+				['host'=>'localhost','port'=>'3306','socket'=>'','user'=>'php','password'=>'php','database'=>'admin']
+			],
 	],
 
 ];

@@ -4,7 +4,7 @@ class bApp {
 	public static $config;			//配置信息
 	public static $CTR;					//控制器
 	public static $FULLCTR;			//控制器（含命名空间）
-	public static $prefixDir='';//CTR前置子目录名
+	public static $prefixDir;   //CTR前置子目录名
 	public static $ctrDir='';		//ctr相对目录
 	public static $ACT;					//动作名
 	public static $ctrTable;		//控制器表
@@ -12,8 +12,11 @@ class bApp {
 	public static $USER;				//用户信息
 	public static $autoTpl=1;		//模板是否自动加载
 
-	public static function loadConfig() {
-		self::$config=require(AA_CONF_FILE);
+	public static function loadConfig($file) {
+		self::$config=include $file;
+	}
+	public static function getConfig($item) {
+		return self::$config[$item];
 	}
 	public static function cliRoute($cmd) {
 		echo $cmd;//TODO 后续完善
@@ -24,17 +27,17 @@ class bApp {
 		$act='index';
 		$actParam=[];
 		$tmp=explode('?',$reqUri,2);
-		if(static::$prefixDir) {
-			$tmp=explode(static::$prefixDir,$tmp[0],2);
+		if(self::$prefixDir) {
+			$tmp=explode(self::$prefixDir,$tmp[0],2);
 			if (isset($tmp[1]))	$tmp[0]=$tmp[1];
 		}
 		$tmp=explode('/',$tmp[0]);
 		unset($tmp[0]);
 		$node=0; // 0=root,1=dir,2=ctr,3=act,4=param
-		$ctrTable=static::$ctrTable;
+		$ctrTable=self::$ctrTable;
 		foreach ($tmp as $val) {
 			if (!$val) continue;
-			if (3==$node){
+			if (3==$node) {
 				$act='a'.$val;
 				$node=4;
 			} elseif (4==$node) {
@@ -66,7 +69,6 @@ class bApp {
 		} else {
 			$error='';
 		}
-
 		if($error) {
 			bHttp::error(['404',$error]);
 		} else {
