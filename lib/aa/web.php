@@ -5,7 +5,7 @@ class AWeb {
 		define('AA_ROOT',__DIR__.'/class/');
 		define('APP_ROOT',$appDir.'/');
 		if (!$configFile) {
-			$configFile=$appDir.'/config.php';
+			$configFile=$appDir.'config.php';
 		}
 		spl_autoload_register(array('AWeb','AAloader'));
 		include APP_ROOT.'core/init.php';
