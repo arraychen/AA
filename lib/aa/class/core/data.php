@@ -8,6 +8,9 @@ class bData {
 	public $count;    //计数
 	public $set;      //数据集
 	public $autoId;   //自增长ID
+	public $pkey;   	//主键
+	public $page;   	//主键
+	public $offset;   	//偏移
 	public static function mod($serverTag='') {
 		$className=get_called_class();
 		if (empty(self::$allModInstance[$className][$serverTag])) {
