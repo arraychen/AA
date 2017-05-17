@@ -1,21 +1,20 @@
 <?php
+
 class bData {
 	private static $allModInstance;
 	public static $allConnect;
-	public $driver;   //array 驱动器配置信息
+	public $driver;   //驱动器名称
 	public $serverTag;//数据库标签
 	public $dbo;      //数据接口对象
 	public $count;    //计数
 	public $set;      //数据集
-	public $autoId;   //自增长ID
-	public $pkey;   	//主键
-	public $page;   	//主键
-	public $offset;   	//偏移
+	public $page;   	//页数
+	public $offset;   	//偏移量
 	public static function mod($serverTag='') {
 		$className=get_called_class();
 		if (empty(self::$allModInstance[$className][$serverTag])) {
 			$obj=new $className;
-			$obj->select($serverTag);
+			$obj->connect($serverTag);
 			self::$allModInstance[$className][$serverTag]=$obj;
 			return $obj;
 		} else {
@@ -44,9 +43,9 @@ class bData {
 		}
 	}
 	public function __construct($serverTag='') {
-			$this->select($serverTag);
+			$this->connect($serverTag);
 	}
-	public function select($serverTag) {  //选择服务器
+	public function connect($serverTag) {  //选择服务器
 		$dataConfig=bApp::getConfig('data');
 		if (!$serverTag) {
 			$key=each($dataConfig);
@@ -54,14 +53,17 @@ class bData {
 		}
 		$this->dbo=self::connectServer($serverTag,$dataConfig[$serverTag]);
 	}
-
-	public function get($Parm) { //获取数据
+	public function getRaw($Parm) { //获取原始数据
 		return $this->dbo->select($Parm);
 	}
-	public function put() { //保存数据
-
+	public function put($data,$cond=NULL) { //保存数据
+		if (is_null($cond)) {
+			$this->dbo->update($data);
+		} else {
+			$this->dbo->insert($data);
+		}
 	}
-	public function del() { //删除数据
-
+	public function del($cond) { //删除数据
+		$this->dbo->delete($cond);
 	}
 }
