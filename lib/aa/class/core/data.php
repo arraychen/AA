@@ -53,8 +53,13 @@ class bData {
 		}
 		$this->dbo=self::connectServer($serverTag,$dataConfig[$serverTag]);
 	}
-	public function getRaw($Parm) { //获取原始数据
-		return $this->dbo->select($Parm);
+	public function get($Parm) {
+		if (is_array($Parm)) {
+			$cond=
+		} else {
+			$cond=['table'=>$this->table,'where'=>$this->key.'='.$Parm];
+		}
+		return $this->dbo->select($cond);
 	}
 	public function put($data,$cond=NULL) { //保存数据
 		if (is_null($cond)) {

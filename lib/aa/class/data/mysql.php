@@ -1,11 +1,11 @@
 <?php
 
-class mysql extends bSql {
+class dMysql extends bSql {
 	public static function quote($f) {	return '`'.$f.'`';}
 	public function connect($config) {
 		$this->dbi=mysql_connect($config);
 		if (isset($config['code']))
-			mysql_query('set names "'.$config['code'].'"',$this->dbi);
+			mysql_query('SET NAMES "'.$config['charset'].'"',$this->dbi);
 	}
 	public function dataBase($name) {
 		$this->dataBase=self::quote($name);

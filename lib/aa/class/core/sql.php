@@ -5,6 +5,7 @@ class bSql {
 	public $table;    		//数据表名称
 	public $autoId;   		//自增ID
 	public $affectedRow;	//影响的行数
+	public $total;				//总记录数
 	public $limit;   			//最大行数
 	public $offset;   		//偏移
 	public function __construct($config) {
