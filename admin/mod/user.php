@@ -1,13 +1,13 @@
 <?php
 class mUser extends bData {
 	//public static $dataName='adminW';
-	public $table='user';
-	public $key='id';
-	public static function field() {
-		return [
-			'id'=>[],
-			'name'=>[],
-			'age'=>[],
-		];
-	}
+	public const type='sql';
+	public const table='user';
+	public const key='id';
+	public const field=[
+		'id'=>[],
+		'name'=>[],
+		'age'=>[],
+	];
+
 }

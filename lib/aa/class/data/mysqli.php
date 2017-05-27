@@ -5,6 +5,7 @@ class dMysqli extends bSql {
 	public function connect($config) {
 		if ($this->dbi=new mysqli($config['host'],$config['user'],$config['password'],$config['database'],$config['port'],$config['socket'])) {
 			$this->dbi->set_charset($config['charset']);
+			$this->dataBase=$config['database'];
 			return true;
 		}
 		return false;
@@ -13,11 +14,8 @@ class dMysqli extends bSql {
 		return $this->dbi->close();
 	}
 	public function dataBase($name) {
-		$this->dataBase=self::quote($name);
+		$this->dataBase=$name;
 		return $this->dbi->select_db($this->dataBase);
-	}
-	public function table($name) {
-		$this->table=self::quote($name);
 	}
 	public function query($sql) {
 		$res=$this->dbi->query($sql);
@@ -29,12 +27,12 @@ class dMysqli extends bSql {
 		$this->total=$result->num_rows;
 		return $result->fetch_assoc();
 	}
-	public function select($parm) {
+
+	public function get($Table,$parm) {
 		$where='';
 		$group='';
 		$having='';
 		$order='';
-		$limit='';
 		$field=[];
 		if (isset($parm['field'])) {
 			if (is_array($parm['field'])) {
@@ -47,9 +45,18 @@ class dMysqli extends bSql {
 		if (isset($parm['expr'])) {
 			$field[]=$parm['expr'];
 		}
-		$select=join(',',$field);
-		if (isset($parm['where']))
-			$where=' WHERE '.$parm['where'];
+		if($field) {
+				$select=join(',',$field);
+		} else
+			$select='*';
+		if (isset($parm['where'])) {
+			$tmp=[];
+			foreach ($parm['where'] as $key=>$val) {
+				$tmp[]=$key.'='.$val;
+			}
+			if($tmp) $where=' WHERE '.join(' AND ',$tmp);
+		}
+
 		if (isset($parm['group']))
 			$group=' GROUP BY '.$parm['group'];
 		if (isset($parm['having']))
@@ -58,10 +65,13 @@ class dMysqli extends bSql {
 			$order=' ORDER BY '.$parm['order'];
 		if (isset($parm['limit']))
 			$limit=' LIMIT '.$parm['limit'];
-		$sql='SELECT '.$select.' FROM '.$parm['table'].$where.$group.$having.$order.$limit;
+		else
+			$limit=' LIMIT '.$this->offset.','.$this->limit;
+		$sql='SELECT '.$select.' FROM '.$Table.$where.$group.$having.$order.$limit;
+		echo $sql;
+		$data=[];
 		if ($result=$this->dbi->query($sql)) {
 			$this->total=$result->num_rows;
-			$data=[];
 			if (isset($parm['key'])) {
 				while ($row=$result->fetch_array(MYSQLI_ASSOC)) {
 					$data[$row[$parm['key']]]=$row;
@@ -71,12 +81,13 @@ class dMysqli extends bSql {
 					$data[]=$row;
 				}
 			}
+			bFun::printR($result);
 			$result->free();
-			return $data;
 		}
-		return;
+		bFun::printR($this);
+		return $data;
 	}
-	public function insert($parm) {
+	public function add($Table,$parm) {
 		/*
 		 * table *
 		 * data  *
@@ -90,14 +101,14 @@ class dMysqli extends bSql {
 		} else {
 			$on='';
 		}
-		$sql='INSERT '.$parm['table'].' SET '.join(',',$data).$on;
+		$sql='INSERT '.$Table.' SET '.join(',',$data).$on;
 
 		$result=$this->dbi->query($sql);
 		$this->autoId=$this->dbi->insert_id;
 		$this->affectedRow=$this->dbi->affected_rows;
 		return $result;
 	}
-	public function update($parm) {
+	public function put($Table,$parm) {
 		/*
 		 * table *
 		 * data  *
@@ -112,12 +123,12 @@ class dMysqli extends bSql {
 		} else {
 			return false;
 		}
-		$sql='UPDATE '.$parm['table'].' SET '.join(',',$data).$where.(isset($parm['limit'])?$parm['limit']:'');
+		$sql='UPDATE '.$Table.' SET '.join(',',$data).$where.(isset($parm['limit'])?$parm['limit']:'');
 		$result=$this->dbi->query($sql);
 		$this->affectedRow=$this->dbi->affected_rows;
 		return $result;
 	}
-	public function delete($parm) {
+	public function del($Table,$parm) {
 		/*
 		 * table *
 		 * where *
@@ -128,17 +139,17 @@ class dMysqli extends bSql {
 		} else {
 			return false;
 		}
-		$sql='DELETE FROM '.$parm['table'].$where.(isset($parm['limit'])?$parm['limit']:'');
+		$sql='DELETE FROM '.$Table.$where.(isset($parm['limit'])?$parm['limit']:'');
 		$result=$this->dbi->query($sql);
 		$this->affectedRow=$this->dbi->affected_rows;
 		return $result;
 	}
-	public function create($parm) {
+	public function create($Table,$parm) {
 		/*
 		 * table *
 		 * def *
 		 */
-		$sql='CREATE TABLE '.$parm['table'].' IF NOT EXISTS '.$parm['def'];
+		$sql='CREATE TABLE '.$Table.' IF NOT EXISTS '.$parm['def'];
 		return $this->dbi->query($sql);
 	}
 
