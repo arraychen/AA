@@ -1,6 +1,7 @@
 <?php
 class bCtr {
 	public static $echo;
+	public static $info;
 	public static function onLoad() {}
 	public static function onEnd() {}
 

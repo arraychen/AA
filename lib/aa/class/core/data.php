@@ -63,7 +63,14 @@ class bData {
 	public function add($Data) {
 		return $this->dbo->add(static::table,$Data);
 	}
-	public function put($Data,$Cond) {
+	public function put($Data,$Cond='') {
+		if (!$Cond) {
+			if (isset($Data[static::key])) {
+				$Cond=static::key.'="'.$Data[static::key].'"';
+			} else {
+				return $this->dbo->add(static::table,$Data);
+			}
+		}
 		return $this->dbo->put(static::table,$Data,$Cond);
 	}
 	public function del($Cond) {
@@ -90,7 +97,7 @@ class bSql {
 	}
 	public function add($table,$data) {
 	}
-	public function put($table,$data) {
+	public function put($Table,$Data,$Where) {
 	}
 	public function del($table,$data) {
 	}

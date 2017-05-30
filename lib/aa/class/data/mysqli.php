@@ -68,7 +68,7 @@ class dMysqli extends bSql {
 		else
 			$limit=' LIMIT '.$this->offset.','.$this->limit;
 		$sql='SELECT '.$select.' FROM '.$Table.$where.$group.$having.$order.$limit;
-		echo $sql;
+		bCtr::$info['SQL'][]=$this->dataBase.':'.$sql;
 		$data=[];
 		if ($result=$this->dbi->query($sql)) {
 			$this->total=$result->num_rows;
@@ -93,55 +93,58 @@ class dMysqli extends bSql {
 		 * data  *
 		 * on
 		 */
-		foreach ($parm['data'] as $key=>$val) {
-			$data[]=$key.'='.$val;
+		foreach ($parm as $key=>$val) {
+			$data[]=$key.'="'.$val.'"';
 		}
+		/*
 		if (isset($parm['on'])) {
 			$on=' ON DUPLICATE KEY UPDATE '.$parm['on'];
 		} else {
 			$on='';
 		}
-		$sql='INSERT '.$Table.' SET '.join(',',$data).$on;
+		*/
+		$sql='INSERT '.$Table.' SET '.join(',',$data);
 
 		$result=$this->dbi->query($sql);
 		$this->autoId=$this->dbi->insert_id;
 		$this->affectedRow=$this->dbi->affected_rows;
+		bFun::printR($this);
 		return $result;
 	}
-	public function put($Table,$parm) {
+	public function put($Table,$Data,$Where) {
 		/*
 		 * table *
 		 * data  *
 		 * where *
 		 * limit
 		 */
-		foreach ($parm['data'] as $key=>$val) {
-			$data[]=$key.'='.$val;
+		foreach ($Data as $key=>$val) {
+			$data[]=$key.'="'.$val.'"';
 		}
-		if (isset($parm['where'])) {
-			$where=' WHERE '.$parm['where'];
-		} else {
-			return false;
-		}
-		$sql='UPDATE '.$Table.' SET '.join(',',$data).$where.(isset($parm['limit'])?$parm['limit']:'');
+		if ($Where) {
+			$where=' WHERE '.$Where;
+		} else $where='';
+		$sql='UPDATE '.$Table.' SET '.join(',',$data).$where;
 		$result=$this->dbi->query($sql);
 		$this->affectedRow=$this->dbi->affected_rows;
+		bFun::printR($this);
 		return $result;
 	}
-	public function del($Table,$parm) {
+	public function del($Table,$Where) {
 		/*
 		 * table *
 		 * where *
 		 * limit
 		 */
-		if (isset($parm['where'])) {
-			$where=' WHERE '.$parm['where'];
+		if ($Where) {
+			$where=' WHERE '.$Where;
 		} else {
 			return false;
 		}
-		$sql='DELETE FROM '.$Table.$where.(isset($parm['limit'])?$parm['limit']:'');
+		$sql='DELETE FROM '.$Table.$where;
 		$result=$this->dbi->query($sql);
 		$this->affectedRow=$this->dbi->affected_rows;
+		bFun::printR($this);
 		return $result;
 	}
 	public function create($Table,$parm) {

@@ -1,11 +1,4 @@
 菜单：
 <?php foreach(gk('menu') as $val) { ?>
-<a href="<?php e($val[0]) ?>"><?php e($val[1]) ?></a>
+<a href="<?=$val[0]?>"><?=$val[1]?></a>
 <?php } ?>
-<?php
-obs();
-?>
-<div id="aa_foot" style="margin: 4px;padding:4px;border:1px solid #999999;width: 800px;margin-top:20px;  margin-left: 10%; center; background: lightblue"><?php e(bCtr::$echo) ?></div>
-<?php
-obe('Foot');
-?>
