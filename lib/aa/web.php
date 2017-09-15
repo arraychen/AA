@@ -1,6 +1,6 @@
 <?php
 
-class Web {
+class aWeb {
 	public static function run($appDir,$configFile='') {
 		define('AA_ROOT',__DIR__.'/class/');
 		define('APP_ROOT',$appDir.'/');

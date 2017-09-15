@@ -9,5 +9,4 @@ class mUser extends bData {
 		'name'=>[],
 		'age'=>[],
 	];
-
 }
