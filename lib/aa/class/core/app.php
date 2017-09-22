@@ -63,25 +63,41 @@ class bApp {
 		//echo '[route:dir="',$subDir,'" ctr="',$ctr,'" call="',$ctrFullName,'::',$act,'(',join(',',$actParam),')"]<hr size=1>',PHP_EOL;
 
 		if (!class_exists($ctrFullName) || !method_exists($ctrFullName,$act)) {
-			$error='class or action '.$ctrFullName.'::'.$act.'() not found';
+			$ctrError='class or action '.$ctrFullName.'::'.$act.'() not found';
 		} else {
-			$error='';
+			$ctrError=null;
 		}
-		if($error) {
-			bHttp::error(['404',$error]);
+		if($ctrError) {
+			bHttp::error(['404',$ctrError]);
 		} else {
 			static::$ctrDir=$subDir;
 			static::$CTR=$ctr;
 			static::$fullCtr=$ctrFullName;
 			static::$ACT=$act;
-			bCtr::startCatchEcho();
-			$ctrFullName::onLoad();
-			$ctrFullName::$act($actParam);
-			$ctrFullName::onEnd();
-			bCtr::endCatchEcho();
-			if (static::$autoTpl) {
-				bTpl::show();
+			try {
+				bCtr::startCatchEcho();
+				$ctrFullName::onLoad();
+				$ctrFullName::$act($actParam);
+				$ctrFullName::onEnd();
+				bCtr::endCatchEcho();
+				if (static::$autoTpl) {
+					bTpl::show();
+				}
+			} catch (bError $error) {
+				bCtr::cleanCatch();
+				bTpl::$tplFile=AA_ROOT.'../buildin/sys/tpl/error';
+				bTpl::$data=['error'=>$error];
+				if (static::$autoTpl) {
+					bTpl::show();
+				}
 			}
 		}
+	}
+}
+class bError extends ErrorException {
+	public $echo;
+	public $env;
+	public function setSeverity($id) {
+		$this->severity=$id;
 	}
 }

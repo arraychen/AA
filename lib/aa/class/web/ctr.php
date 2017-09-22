@@ -1,7 +1,7 @@
 <?php
 class bCtr {
 	public static $echo;
-	public static $info;
+	public static $info=[];
 	public static function onLoad() {}
 	public static function onEnd() {}
 
@@ -11,6 +11,9 @@ class bCtr {
 	final public static function endCatchEcho() {
 		self::$echo=ob_get_contents();
 		ob_end_clean();
+	}
+	final public static function cleanCatch() {
+		ob_clean();
 	}
 	final public static function getEcho() {
 		return self::$echo;

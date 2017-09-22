@@ -1,10 +1,10 @@
 <?php
 
-function e($str) {	echo $str;}
-function ek($key) {	if (isset(bTpl::$data[$key])) echo bTpl::$data[$key];}
-function eb($key) {	if (isset(bTpl::$block[$key])) echo bTpl::$block[$key];}
-function gk($key,$type='s') {
-	if (isset(bTpl::$data[$key])) return bTpl::$data[$key];
+function e($s) {	echo $s;}
+function ek($k) {	if (isset(bTpl::$data[$k])) echo bTpl::$data[$k];}
+function eb($k) {	if (isset(bTpl::$block[$k])) echo bTpl::$block[$k];}
+function gk($k,$type='s') {
+	if (isset(bTpl::$data[$k])) return bTpl::$data[$k];
 	else {
 		if ('a'==$type)  return [];
 		elseif ('o'==$type)  return new stdClass();
@@ -21,7 +21,9 @@ function obi($file,&$var) {
 
 class bTpl {
 	public static $layout='';
+	public static $tplFile='';
 	public static $tplName='';
+	public static $type='html';//html, json, mobile, text
 	public static $data=[];
 	public static $block=[];
 		public static function setData($data=[],$tplName='') {
@@ -29,20 +31,24 @@ class bTpl {
 			static::$tplName=$tplName;
 	}
 	public static function show() {
-		if(static::$tplName) {
-			$bTplFile=APP_ROOT.'web/tpl/page/'.strtolower(bApp::$ctrDir.static::$tplName).'.html';
-		} else {
-			$bTplFile=APP_ROOT.'web/tpl/auto/'.strtolower(bApp::$ctrDir.bApp::$CTR.'_'.bApp::$ACT).'.html';
+		$tplDir=APP_ROOT.'web/tpl/';
+		if (static::$tplFile) $tplFile=static::$tplFile.'.html';
+		else {
+			if(static::$tplName) {
+				$tplFile=$tplDir.'page/'.strtolower(bApp::$ctrDir.static::$tplName).'.html';
+			} else {
+				$tplFile=$tplDir.'auto/'.strtolower(bApp::$ctrDir.bApp::$CTR.'_'.bApp::$ACT).'.html';
+			}
 		}
-		if(file_exists($bTplFile)) {
-			if (self::$layout) {
+		if(file_exists($tplFile)) {
+			if (static::$layout) {
 				ob_start();
-				include $bTplFile;
+				include $tplFile;
 				$main=ob_get_clean();
-				include APP_ROOT.'web/tpl/layout/'.self::$layout.'.html';
-			} else include $bTplFile;
+				include $tplDir.'layout/'.static::$layout.'.html';
+			} else include $tplFile;
 		} else {
-			bHttp::error(['404','tpl('.$bTplFile.') not found']);
+			bHttp::error(['404','tpl('.$tplFile.') not found']);
 		}
 	}
 	public static function layout($data) {

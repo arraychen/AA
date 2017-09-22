@@ -2,10 +2,9 @@
 
 class bData {
 	private static $allModInstance;
-	public static $allConnect;
-	public $driver;			//驱动器名称
+	private static $allConnect;
+	protected $driver;	//数据接口驱动器对象
 	public $serverTag;	//数据库标签
-	public $dbo;				//数据接口对象
 	public $page;				//页数
 	public $limit;			//每页数量
 	public $offset;			//偏移量
@@ -18,16 +17,6 @@ class bData {
 			return $obj;
 		} else {
 			return self::$allModInstance[$className][$serverTag];
-		}
-	}
-	public static function connectServer($serverTag,$dataConfig) {
-		if (empty(self::$allConnect[$serverTag])) {
-			$className='d'.$dataConfig[0];
-			$obj=new $className($dataConfig[1]);
-			self::$allConnect[$serverTag]=$obj;
-			return $obj;
-		} else {
-			return self::$allConnect[$serverTag];
 		}
 	}
 	public static function closeConnect($serverTag='') {
@@ -44,13 +33,21 @@ class bData {
 	public function __construct($serverTag='') {
 			$this->connect($serverTag);
 	}
-	public function connect($serverTag) {  //选择服务器
+	public function connect($serverTag) {  //连接服务器
 		$dataConfig=bApp::getConfig('data');
-		if (!$serverTag) {
+		if (!$serverTag) {//如果空则取第一个配置信息
 			$key=each($dataConfig);
 			$serverTag=$key[0];
 		}
-		$this->dbo=self::connectServer($serverTag,$dataConfig[$serverTag]);
+		//bFun::printR($dataConfig);die;
+		if (empty(self::$allConnect[$serverTag])) {
+			$className='d'.$dataConfig[$serverTag][0];
+			$obj=new $className($dataConfig[$serverTag][1]);
+			self::$allConnect[$serverTag]=$obj;
+			$this->driver=$obj;
+		} else {
+			$this->driver=self::$allConnect[$serverTag];
+		}
 	}
 
 	public function get($Parm=[]) {
@@ -58,32 +55,33 @@ class bData {
 			$cond['where']=$Parm;
 		} else
 			$cond['where']=[static::key=>$Parm];
-		return $this->dbo->get(static::table,$cond);
+		return $this->driver->get(static::table,$cond);
 	}
 	public function add($Data) {
-		return $this->dbo->add(static::table,$Data);
+		return $this->driver->add(static::table,$Data);
 	}
 	public function put($Data,$Cond='') {
 		if (!$Cond) {
 			if (isset($Data[static::key])) {
 				$Cond=static::key.'="'.$Data[static::key].'"';
 			} else {
-				return $this->dbo->add(static::table,$Data);
+				return $this->driver->add(static::table,$Data);
 			}
 		}
-		return $this->dbo->put(static::table,$Data,$Cond);
+		return $this->driver->put(static::table,$Data,$Cond);
 	}
 	public function del($Cond) {
-		return $this->dbo->del(static::table,$Cond);
+		return $this->driver->del(static::table,$Cond);
 	}
 	public function load($Cond) {
-		return $this->dbo->load($Cond);
+		return $this->driver->load($Cond);
 	}
 }
 
 class bSql {
 	public $dbi; 					//数据库接口对象或资源
 	public $dataBase;			//数据库名称
+	public $table;				//数据表名称
 	public $autoId;   		//自增ID
 	public $affectedRow=0;	//影响的行数
 	public $total=0;			//总记录数

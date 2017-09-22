@@ -3,15 +3,19 @@
 class dMysqli extends bSql {
 	public static function quote($f) {	return '`'.$f.'`';}
 	public function connect($config) {
-		if ($this->dbi=new mysqli($config['host'],$config['user'],$config['password'],$config['database'],$config['port'],$config['socket'])) {
+		$mysqli=mysqli_init();
+		$mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, 3);
+		if ($this->dbi=@$mysqli->real_connect($config['host'],$config['user'],$config['password'],$config['database'],$config['port'],$config['socket'])) {
 			$this->dbi->set_charset($config['charset']);
 			$this->dataBase=$config['database'];
-			return true;
+		} else {
+			$error=new bError($mysqli->connect_error);
+			$error->echo='连接数据库失败，程序终止执行';
+			throw $error;
 		}
-		return false;
 	}
 	public function close() {
-		return $this->dbi->close();
+		$this->dbi->close();
 	}
 	public function dataBase($name) {
 		$this->dataBase=$name;
@@ -146,6 +150,14 @@ class dMysqli extends bSql {
 		$this->affectedRow=$this->dbi->affected_rows;
 		bFun::printR($this);
 		return $result;
+	}
+	public function load($Table) {
+		/*
+		 * table *
+		 * def *
+		 */
+		$sql='CREATE TABLE '.$Table.' IF NOT EXISTS '.$parm['def'];
+		return $this->dbi->query($sql);
 	}
 	public function create($Table,$parm) {
 		/*
