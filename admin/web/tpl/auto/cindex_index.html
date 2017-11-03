@@ -2,3 +2,12 @@
 <?php foreach(gk('menu') as $val) { ?>
 <a href="<?=$val[0]?>"><?=$val[1]?></a>
 <?php } ?>
+用户列表：<p>
+    <?php
+    bFun::printR(gk('userList'));
+    /*
+     foreach(gk('userList') as $val) { ?>
+    <a href="<?=$val['id']?>"><?=$val['name']?></a>
+    <?php } */ ?>
+</p>
+

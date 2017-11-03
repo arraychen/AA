@@ -11,7 +11,7 @@ class aApp extends bApp {
 
 class aCtr extends bCtr {
 	public static function onEnd() {
-		bCtr::$info['included_files']=get_included_files();
+		bCtr::$info['included']=get_included_files();
 	}
 }
 

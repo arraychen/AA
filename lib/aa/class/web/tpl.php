@@ -26,9 +26,9 @@ class bTpl {
 	public static $type='html';//html, json, mobile, text
 	public static $data=[];
 	public static $block=[];
-		public static function setData($data=[],$tplName='') {
-		static::$data=$data;
-			static::$tplName=$tplName;
+	public static function set($data,$tplName='') {
+		static::$data=$data+static::$data;
+		if($tplName)	static::$tplName=$tplName;
 	}
 	public static function show() {
 		$tplDir=APP_ROOT.'web/tpl/';

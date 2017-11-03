@@ -5,28 +5,27 @@
     <style>
      * {font-size: 14px}
      p,pre{
-			white-space: pre-wrap!important;
-      word-wrap: break-word!important;
-      *white-space:normal!important;
-         margin:2px;}
+		white-space: pre-wrap!important;
+        word-wrap: break-word!important;
+        *white-space:normal!important;
+        margin:2px;}
      #aa_foot {
-         margin: 10px 4px 4px 4px;
-			 padding: 2px;
-       border: 1px solid #000000;
-       width: 600px;
-        height:500px;
+        margin: 10px auto;
+		padding: 2px;
+        border: 1px solid #000000;
+        width: 600px;
+        height:600px;
         overflow-y: auto;
         background: #cdccfb;
         word-break: break-all;
         word-wrap: break-word;
-        position: fixed;
      }
     </style>
 </head>
 <body>
 <?=$main?>
-<div id="aa_foot" title="点击隐藏" onclick="if(this.style.height=='80px') this.style.height='500px';else
-	this.style.height='80px';"><?php
+<div id="aa_foot" title="点击隐藏" onclick="if(this.style.height=='90px') this.style.height='600px';else
+	this.style.height='90px';"><?php
 echo bCtr::$echo,'<hr size=1>';
 foreach(bCtr::$info as $key =>$val ) {
     echo '<b>',$key,'</b><br>';

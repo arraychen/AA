@@ -1,171 +1,194 @@
 <?php
 
 class dMysqli extends bSql {
-	public static function quote($f) {	return '`'.$f.'`';}
+	public static function col($F) {	return '`'.str_replace('`','``',$F).'`';}
+	public static function bin($Input) {
+		return '\''.str_replace(['\\','\'','"',"\0"],['\\\\','\\\'','\\"',"\\\0"],$Input).'\'';
+	}
+	public static function str($Input) {
+		return '\''.str_replace(['\\','\'','"',"\r","\n","\0","\b","\Z"],['\\\\','\\\'','\\""',"\\\r","\\\n","\\\0","\\\b","\\\Z"],$Input).'\'';
+	}
+	public static function num($Input) {
+		if(is_numeric($Input))
+			return $Input;
+		else return 0;
+	}
+	public static function exp($Tpl,$Input=[]) {
+		if ($Input) {
+			$arg=[];
+			foreach ($Input as $val) {
+				if (COL==$val[0]) { // field
+					$arg[]=self::quote($val[1]);
+				} elseif (NUM==$val[0]) { //num
+					$arg[]=self::num($val[1]);
+				} elseif (STR==$val[0]) { //string
+					$arg[]=self::str($val[1]);
+				}
+			}
+			return vsprintf($Tpl,$arg);
+		} else return $Tpl;
+	}
+	public static function buildField($Item=[]) {
+		/* 组合多个列
+		 *例子： [[STR,'a','name'],[NUM,1],[COL,'key'],[EXP,'from_unixtime(%s)',[NUM,100000]]]
+		 */
+		$fieldArr=[];
+		foreach ($Item as $value) {
+			if (EXP==$value[0]) {//expr
+				$fieldArr[]=self::exp($value[1],$value[2]);
+			} elseif (COL==$value[0]) {
+				$fieldArr[]=self::col($value[1]).(isset($value[2])?' AS '.self::col($value[2]):'');
+			} elseif (NUM==$value[0]){
+				$fieldArr[]=self::num($value[1]);
+			} else {
+				$fieldArr[]=self::str($value[1]);
+			}
+		}
+		return join(',',$fieldArr);
+	}
+	public static function buildValue($Item) {
+		/* 组合值
+		 * 例子：[[NUM,'age',30],[STR,'name','tom'],[EXP,'time','now()',[]]]
+		 */
+		$valueArr=[];
+		foreach ($Item as $value) {
+			if (NUM==$value[0]) {//num
+				$safeValue=self::num($value[2]);
+			} elseif (STR==$value[0]) {//string
+				$safeValue=self::str($value[2]);
+			} elseif (BIN==$value[0]) {//bing
+				$safeValue=self::bin($value[2]);
+			} elseif (EXP==$value[0]) {//express
+				if (isset($value[3]))	$safeValue=self::exp($value[2],$value[3]);
+				else $safeValue=$value[2];
+			}
+			$valueArr[]=self::col($value[1]).'='.$safeValue;
+		}
+		return join(',',$valueArr);
+	}
+	public static function buildWhere($Where,$Join='AND') {
+		/*
+		 * 组合条件
+		 * 例子：[[NUM,'id',1],[STR,'name','tom'],[EXP,'%s>%s',[[COL,'age'],[NUM,20]]]]
+		 */
+		$whereArr=[];
+		foreach ($Where as $value) {
+			if (NUM==$value[0]) {//num
+				$whereArr[]=self::col($value[1]).'='.self::num($value[2]);
+			} elseif (STR==$value[0]) {//string
+				$whereArr[]=self::col($value[1]).'='.self::str($value[2]);
+			} elseif (EXP==$value[0]) {
+				$whereArr[]=self::exp($value[1],$value[2]);
+			}
+		}
+		return join(' '.$Join.' ',$whereArr);
+	}
+
+
 	public function connect($config) {
 		$mysqli=mysqli_init();
-		$mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, 3);
-		if ($this->dbi=@$mysqli->real_connect($config['host'],$config['user'],$config['password'],$config['database'],$config['port'],$config['socket'])) {
+		$mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, 1);
+		if (@$mysqli->real_connect($config['host'],$config['user'],$config['password'],$config['database'],$config['port'],$config['socket'])) {
+			$this->dbi=$mysqli;
 			$this->dbi->set_charset($config['charset']);
 			$this->dataBase=$config['database'];
 		} else {
 			$error=new bError($mysqli->connect_error);
-			$error->echo='连接数据库失败，程序终止执行';
+			$error->echo='连接数据库服务器超时(>1秒)';
 			throw $error;
 		}
 	}
 	public function close() {
-		$this->dbi->close();
+		return $this->dbi->close();
 	}
 	public function dataBase($name) {
 		$this->dataBase=$name;
 		return $this->dbi->select_db($this->dataBase);
 	}
-	public function query($sql) {
-		$res=$this->dbi->query($sql);
-		$this->autoId=$this->dbi->insert_id;
-		$this->affectedRow=$this->dbi->affected_rows;
-		return $res;
-	}
-	public function fetch($result) {
-		$this->total=$result->num_rows;
-		return $result->fetch_assoc();
-	}
-
-	public function get($Table,$parm) {
-		$where='';
-		$group='';
-		$having='';
-		$order='';
-		$field=[];
-		if (isset($parm['field'])) {
-			if (is_array($parm['field'])) {
-				foreach ($parm['field'] as $val) {
-					$field[]=self::quote($val);
+	public function query($Sql,$Bind=[]) {
+		if ($Bind) {
+			$Sql=self::exp($Sql,$Bind);
+		}
+		bCtr::$info['SQL'][]=__LINE__.':'.$this->dataBase.':'.$Sql;
+		if($result=$this->dbi->query($Sql)) {
+//			bFun::varDump($result);
+			$return=new bResult();
+			if ($this->dbi->insert_id) {
+				$return->autoId=$this->dbi->insert_id;
+				$return->affectedRow=$this->dbi->affected_rows;
+			//bFun::printR($this->dbi);
+			} elseif(isset($result->num_rows)) {
+				$return->total=$result->num_rows;
+				if($result->num_rows>0) {
+					$data=[];
+					$return->page=ceil($result->num_rows/$this->limit);
+					while ($row=$result->fetch_array(MYSQLI_ASSOC)) {
+						$data[]=$row;
+					}
 				}
-			} else
-				$field[]=$parm['field'];
-		}
-		if (isset($parm['expr'])) {
-			$field[]=$parm['expr'];
-		}
-		if($field) {
-				$select=join(',',$field);
-		} else
-			$select='*';
-		if (isset($parm['where'])) {
-			$tmp=[];
-			foreach ($parm['where'] as $key=>$val) {
-				$tmp[]=$key.'='.$val;
+				$result->free();
+				$return->data=$data;
 			}
-			if($tmp) $where=' WHERE '.join(' AND ',$tmp);
+			return $return;
 		}
+		return false;
+	}
 
-		if (isset($parm['group']))
-			$group=' GROUP BY '.$parm['group'];
-		if (isset($parm['having']))
-			$having=' HAVING '.$parm['having'];
-		if (isset($parm['order']))
-			$order=' ORDER BY '.$parm['order'];
-		if (isset($parm['limit']))
-			$limit=' LIMIT '.$parm['limit'];
+	public function select($Table,$Parm) {
+		$where=$group=$having=$order='';
+		$field='*';
+		if (isset($Parm['field'])) {
+			$field=self::buildField($Parm['field']);
+		}
+		if (isset($Parm['where'])) {
+			$where=self::buildWhere($Parm['where']);
+		}
+		if (isset($Parm['group']))
+			$group=' GROUP BY '.$Parm['group'];
+		if (isset($Parm['having']))
+			$having=' HAVING '.$Parm['having'];
+		if (isset($Parm['order']))
+			$order=' ORDER BY '.$Parm['order'];
+		if (isset($Parm['limit']))
+			$limit=' LIMIT '.$Parm['limit'];
 		else
 			$limit=' LIMIT '.$this->offset.','.$this->limit;
-		$sql='SELECT '.$select.' FROM '.$Table.$where.$group.$having.$order.$limit;
-		bCtr::$info['SQL'][]=$this->dataBase.':'.$sql;
-		$data=[];
-		if ($result=$this->dbi->query($sql)) {
-			$this->total=$result->num_rows;
-			if (isset($parm['key'])) {
-				while ($row=$result->fetch_array(MYSQLI_ASSOC)) {
-					$data[$row[$parm['key']]]=$row;
-				}
-			} else {
-				while ($row=$result->fetch_array(MYSQLI_ASSOC)) {
-					$data[]=$row;
-				}
-			}
-			bFun::printR($result);
-			$result->free();
-		}
-		bFun::printR($this);
-		return $data;
+		$sql='SELECT '.$field.' FROM '.$Table.($where?' WHERE '.$where:'').$group.$having.$order.$limit;
+		return $this->query($sql);
 	}
-	public function add($Table,$parm) {
-		/*
-		 * table *
-		 * data  *
-		 * on
-		 */
-		foreach ($parm as $key=>$val) {
-			$data[]=$key.'="'.$val.'"';
-		}
-		/*
-		if (isset($parm['on'])) {
-			$on=' ON DUPLICATE KEY UPDATE '.$parm['on'];
-		} else {
-			$on='';
-		}
-		*/
-		$sql='INSERT '.$Table.' SET '.join(',',$data);
-
-		$result=$this->dbi->query($sql);
-		$this->autoId=$this->dbi->insert_id;
-		$this->affectedRow=$this->dbi->affected_rows;
-		bFun::printR($this);
-		return $result;
+	public function insert($Table,$Data) {
+		$sql='INSERT '.$Table.' SET '.self::buildValue($Data);
+		return $this->query($sql);
 	}
-	public function put($Table,$Data,$Where) {
-		/*
-		 * table *
+	public function update($Table,$Data,$Where) {
+		/* table *
 		 * data  *
 		 * where *
 		 * limit
 		 */
-		foreach ($Data as $key=>$val) {
-			$data[]=$key.'="'.$val.'"';
-		}
 		if ($Where) {
-			$where=' WHERE '.$Where;
-		} else $where='';
-		$sql='UPDATE '.$Table.' SET '.join(',',$data).$where;
-		$result=$this->dbi->query($sql);
-		$this->affectedRow=$this->dbi->affected_rows;
-		bFun::printR($this);
-		return $result;
+			$sql='UPDATE '.$Table.' SET '.self::buildValue($Data).' WHERE '.self::buildWhere($Where);
+			return $this->query($sql);
+		}
+		return false;
 	}
-	public function del($Table,$Where) {
-		/*
-		 * table *
+	public function delete($Table,$Where) {
+		/* table *
 		 * where *
 		 * limit
 		 */
 		if ($Where) {
-			$where=' WHERE '.$Where;
-		} else {
-			return false;
+			$where=self::buildWhere($Where);
+			$sql='DELETE FROM '.$Table.($where?' WHERE '.$where:'');
+			return $this->query($sql);
 		}
-		$sql='DELETE FROM '.$Table.$where;
-		$result=$this->dbi->query($sql);
-		$this->affectedRow=$this->dbi->affected_rows;
-		bFun::printR($this);
-		return $result;
-	}
-	public function load($Table) {
-		/*
-		 * table *
-		 * def *
-		 */
-		$sql='CREATE TABLE '.$Table.' IF NOT EXISTS '.$parm['def'];
-		return $this->dbi->query($sql);
+		return false;
 	}
 	public function create($Table,$parm) {
-		/*
-		 * table *
-		 * def *
+		/* table *
+		 * define *
 		 */
-		$sql='CREATE TABLE '.$Table.' IF NOT EXISTS '.$parm['def'];
-		return $this->dbi->query($sql);
+		$sql='CREATE TABLE '.$Table.' IF NOT EXISTS '.$parm['define'];
+		return $this->query($sql);
 	}
-
 }
