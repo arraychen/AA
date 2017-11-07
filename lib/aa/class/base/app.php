@@ -68,7 +68,7 @@ class bApp {
 			$ctrError=null;
 		}
 		if($ctrError) {
-			bHttp::error(['404',$ctrError]);
+			aHttp::error(['404',$ctrError]);
 		} else {
 			static::$ctrDir=$subDir;
 			static::$CTR=$ctr;
@@ -81,14 +81,14 @@ class bApp {
 				$ctrFullName::onEnd();
 				bCtr::endCatchEcho();
 				if (static::$autoTpl) {
-					bTpl::show();
+					aTpl::show();
 				}
 			} catch (bError $error) {
 				bCtr::cleanCatch();
 				bTpl::$tplFile=AA_ROOT.'../buildin/sys/tpl/error';
 				bTpl::$data=['error'=>$error];
 				if (static::$autoTpl) {
-					bTpl::show();
+					aTpl::show();
 				}
 			}
 		}

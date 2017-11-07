@@ -8,13 +8,15 @@ class aApp extends bApp {
 		'logout'=>1,
 	];
 }
+//class aMod extends bMod {}
 
 class aCtr extends bCtr {
 	public static function onEnd() {
-		bCtr::$info['included']=get_included_files();
+		bCtr::$info['加载文件']=get_included_files();
 	}
 }
 
-bTpl::$layout='pc';
-//class aMod extends bMod {}
-//class aTpl extends bTpl {}
+class aTpl extends bTpl {
+	public static $layout='pc';
+}
+class aError extends bError {}

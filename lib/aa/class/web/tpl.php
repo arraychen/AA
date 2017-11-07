@@ -20,22 +20,22 @@ function obi($file,&$var) {
 }
 
 class bTpl {
-	public static $layout='';
-	public static $tplFile='';
-	public static $tplName='';
+	public static $layout='pc';//
 	public static $type='html';//html, json, mobile, text
+	public static $tplFile='';//常变
+	public static $tplName='';//常变
 	public static $data=[];
 	public static $block=[];
 	public static function set($data,$tplName='') {
-		static::$data=$data+static::$data;
-		if($tplName)	static::$tplName=$tplName;
+		self::$data=$data+self::$data;
+		if($tplName)	self::$tplName=$tplName;
 	}
 	public static function show() {
 		$tplDir=APP_ROOT.'web/tpl/';
-		if (static::$tplFile) $tplFile=static::$tplFile.'.html';
+		if (self::$tplFile) $tplFile=self::$tplFile.'.html';
 		else {
-			if(static::$tplName) {
-				$tplFile=$tplDir.'page/'.strtolower(bApp::$ctrDir.static::$tplName).'.html';
+			if(self::$tplName) {
+				$tplFile=$tplDir.'page/'.strtolower(bApp::$ctrDir.self::$tplName).'.html';
 			} else {
 				$tplFile=$tplDir.'auto/'.strtolower(bApp::$ctrDir.bApp::$CTR.'_'.bApp::$ACT).'.html';
 			}
