@@ -10,8 +10,22 @@ class mUser extends bData {
 		'age'=>[NUM,'年龄'],
 		'atime'=>[STR,'添加时间'],
 	];
-	public const rule=[
+	public const formRule=[
+		'add'=>['name,age','*','{name}字段数据不能为空'],
+		'update'=>['id,name,age','*'],
+		'search'=>['name,age','*'],
+	];
+	public const saveRule=[
 		'add'=>['name,age','*','{name}字段数据不能为空'],
 		'update'=>['id,name,age','*'],
 	];
+	public const outRule=[
+		'html'=>['atime'=>['addtime','时间'],'img'=>['userimg','头像']],
+	];
+	public static function addtime($row) {
+		return substr($row['atime'],0,4);
+	}
+	public static function userimg($row) {
+		return '<img src="'.$row['id'].'">';
+	}
 }

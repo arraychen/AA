@@ -26,7 +26,7 @@ class cIndex extends aCtr {
 		//$u->offset('aa',2);
 		//$a=$u->put(['age'=>30,'name'=>'姓名aaaaa','atime'=>bexp('now()')],1);
 		//$a=mUser::mod()->get();
-		$userList=new bList($user);
+		$userList=new \bList($user);
 		//$a=mUser::mod()->query('select * from user WHERE %s>%s',[[COL,'id'],[NUM,1]]);
 		aTpl::put(['userList'=>$userList]);
 		//bTpl::show('aaa');

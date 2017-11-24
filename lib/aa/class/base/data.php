@@ -15,6 +15,7 @@ class bData {
 	private static $allConnect;
 	protected $driver;	//数据接口驱动器对象
 	public $serverTag;	//数据库标签
+	public $state;			//状态
 
 	public static function mod($serverTag='') {
 		$className=get_called_class();

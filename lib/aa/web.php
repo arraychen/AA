@@ -3,16 +3,15 @@
 class aWeb {
 	public static function run($appDir,$configFile='') {
 		define('AA_ROOT',__DIR__.'/class/');
-		define('APP_ROOT',$appDir.'/');
+		define('APP_ROOT',$appDir);
 		if (!$configFile) $configFile=$appDir.'config.php';
 		spl_autoload_register(array(__CLASS__,'AAloader'));
 		include APP_ROOT.'base/init.php';
 		aApp::webRoute($_SERVER['REQUEST_URI'],$configFile);
 	}
 	public static function AAloader($className) {
-    $nameSpace=explode('\\',$className);
-    $className=strtolower(array_pop($nameSpace));
-    switch ($className{0}) {
+		$className=strtolower($className);
+		switch ($className{0}) {
 			case 'a':{
 				//app-web实例初始化
 				include APP_ROOT.'base/'.substr($className,1).'.php';
@@ -31,6 +30,8 @@ class aWeb {
 					'bctr'	=>'base/ctr',
 					'btpl'	=>'web/tpl',
 					'bhttp'	=>'web/http',
+					'blist'	=>'web/list',
+					'bform'	=>'web/form',
 				];
 				if(isset($inClass[$className])) {
 					include AA_ROOT.$inClass[$className].'.php';
@@ -39,10 +40,7 @@ class aWeb {
 			}
 			case 'c':{
 				//应用控制器
-				if ($nameSpace) {
-					$nameSpace=strtolower(join('/',$nameSpace)).'/';
-				} else $nameSpace='';
-				include APP_ROOT.'web/ctr/'.$nameSpace.substr($className,1).'.php';
+				include APP_ROOT.'web/ctr/'.aApp::$ctrDir.substr($className,1).'.php';
 				break;
 			}
 			case 'd':{
@@ -55,9 +53,9 @@ class aWeb {
 				include APP_ROOT.'mod/'.substr($className,1).'.php';
 				break;
 			}
-	    default: {
-		    require APP_ROOT.'base/'.$className.'.php';
-	    }
+			default: {
+				require APP_ROOT.'base/'.$className.'.php';
+			}
 		}
 	}
 }

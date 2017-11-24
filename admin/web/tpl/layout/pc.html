@@ -1,7 +1,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>网站标题 <?php ek('title') ?></title>
+    <title><?=$title?></title>
     <style>
      * {font-size: 14px}
      p,pre{
@@ -23,11 +23,14 @@
     </style>
 </head>
 <body>
-<?=$main?>
+<table border="1" width="95%" cellspacing="0">
+  <tr><td colspan="2"><?=$Menu?></td></tr>
+  <tr><td width="200" valign="top"><?=$Left?></td><td><?=$MAIN?></td></tr>
+</table>
 <div id="aa_foot" title="点击隐藏" onclick="if(this.style.height=='90px') this.style.height='600px';else
 	this.style.height='90px';"><?php
-echo bCtr::$echo,'<hr size=1>';
-foreach(bCtr::$info as $key =>$val ) {
+echo aApp::$ctrClass::$echo,'<hr size=1>';
+foreach( aApp::$ctrClass::$info as $key =>$val ) {
     echo '<b>',$key,'</b><br>';
     foreach($val as $k=>$v) {
       echo $k+1,' ',$v,'<br>';

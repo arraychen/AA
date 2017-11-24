@@ -1,10 +1,9 @@
 <?php
 
 function e($s) {	echo $s;}
-function ek($k) {	if (isset(bTpl::$data[$k])) echo bTpl::$data[$k];}
-function eb($k) {	if (isset(bTpl::$block[$k])) echo bTpl::$block[$k];}
+function ek($k) {	echo aApp::$tplClass::$data[$k]??aApp::$tplClass::$data[$k];}
 function gk($k,$type='s') {
-	if (isset(bTpl::$data[$k])) return bTpl::$data[$k];
+	if (isset(aApp::$tplClass::$data[$k])) return aApp::$tplClass::$data[$k];
 	else {
 		if ('a'==$type)  return [];
 		elseif ('o'==$type)  return new stdClass();
@@ -12,7 +11,7 @@ function gk($k,$type='s') {
 	}
 }
 function obs() {ob_start();}
-function obe($key) {bTpl::$block[$key]=ob_get_clean();}
+function obe($key) {aApp::$tplClass::$block[$key]=ob_get_clean();}
 function obi($file,&$var) {
 	ob_start();
 	include $file;
@@ -22,44 +21,59 @@ function obi($file,&$var) {
 class bTpl {
 	public static $layout='pc';//
 	public static $type='html';//html, json, mobile, text
-	public static $tplFile='';//常变
-	public static $tplName='';//常变
-	public static $data=[];
+	protected static $tplFile='';//常变
+	protected static $tplName='';//常变
+	public static $data=[]; //必须通过方法设置
 	public static $block=[];
-	public static function set($data,$tplName='') {
+	public static function put($data,$tplName='') {
 		self::$data=$data+self::$data;
 		if($tplName)	self::$tplName=$tplName;
 	}
 	public static function show() {
-		$tplDir=APP_ROOT.'web/tpl/';
-		if (self::$tplFile) $tplFile=self::$tplFile.'.html';
+		if (self::$tplFile) self::$tplFile.='.html';
 		else {
 			if(self::$tplName) {
-				$tplFile=$tplDir.'page/'.strtolower(bApp::$ctrDir.self::$tplName).'.html';
+				 self::$tplFile=APP_ROOT.'web/tpl/page/'.strtolower(bApp::$ctrDir.self::$tplName).'.html';
 			} else {
-				$tplFile=$tplDir.'auto/'.strtolower(bApp::$ctrDir.bApp::$CTR.'_'.bApp::$ACT).'.html';
+				 self::$tplFile=APP_ROOT.'web/tpl/auto/'.strtolower(bApp::$ctrDir.bApp::$ctrName.'_'.bApp::$actName).'.html';
 			}
 		}
-		if(file_exists($tplFile)) {
-			if (static::$layout) {
+		if(file_exists( self::$tplFile)) {
+			if (self::$layout) {
+				foreach (self::$data as $dataKey=>$dataVal) {
+					$$dataKey=$dataVal;
+				}
+				foreach (self::$block as $BlockKey=>$AATplBlockName) {
+					if(file_exists( APP_ROOT.'web/tpl/block/'.$AATplBlockName.'.html')) {
+					ob_start();
+					include APP_ROOT.'web/tpl/block/'.$AATplBlockName.'.html';
+					${ucfirst($BlockKey)}=ob_get_clean();
+					}
+				}
 				ob_start();
-				include $tplFile;
-				$main=ob_get_clean();
-				include $tplDir.'layout/'.static::$layout.'.html';
-			} else include $tplFile;
+				include self::$tplFile;
+				$MAIN=ob_get_clean();
+				include APP_ROOT.'web/tpl/layout/'.self::$layout.'.html';
+			} else include self::$tplFile;
 		} else {
-			bHttp::error(['404','tpl('.$tplFile.') not found']);
+			aApp::$httpClass::error(['404','tpl('.self::$tplFile.') not found']);
 		}
 	}
 	public static function layout($data) {
-		bFun::printR($data);
+		aApp::$funClass::printR($data);
 	}
 	public static function echoArray($data) {
-		if (empty($data)) echo '';
-		else {
+		if (!empty($data)) {
 			foreach ($data as $key => $value) {
 				echo $key,':',$value,PHP_EOL;
 			}
 		}
+	}
+	public static function tr($tpl,$data) {
+		foreach ($data as $key =>$val) {
+			if(is_array($val))	$tran['{'.$key.'}']=$val[1];
+			else $tran['{'.$key.'}']=$val;
+		}
+		return strtr($tpl,$tran);
 	}
 }

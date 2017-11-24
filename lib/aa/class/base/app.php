@@ -1,13 +1,19 @@
 <?php
 
 class bApp {
-	public const prefixDir='';		//ctr相对目录
+	public static $httpClass='bHttp';		//基础类名，可继承扩展
+	public static $ctrClass='bCtr';			//基础类名，可继承扩展
+	public static $tplClass='bTpl';			//基础类名，可继承扩展
+	public static $errorClass='bError';	//基础类名，可继承扩展
+	public static $funClass='bFun';	//基础类名，可继承扩展
+
+	public const prefixDir='';		//ctr绝对子目录名
 	public const ctrTable=[];		//控制器表
 	public static $config;			//配置信息
-	public static $CTR;					//控制器
+	public static $ctrName;			//控制器
 	public static $fullCtr;			//控制器（含命名空间）
-	public static $ACT;					//动作名
-	public static $ctrDir;			//动作名
+	public static $actName;			//动作名
+	public static $ctrDir;			//动作目录
 	public static $echo;				//输出字符
 	public static $user;				//用户信息
 	public static $autoTpl=1;		//模板是否自动加载
@@ -31,10 +37,12 @@ class bApp {
 		}
 		$tmp=explode('/',$tmp[0]);
 		unset($tmp[0]);
+		$errorCode=0;
+		$userLevel=static::$user['level']??static::$user['level']??0; //0=默认匿名 1 2 3 4 高更层级
 		$node=0; // 0=root,1=dir,2=ctr,3=act,4=param
 		$ctrTable=static::ctrTable;
 		foreach ($tmp as $val) {
-			if (!$val) continue;
+			//if (strlen($val)<1) continue;
 			if (3==$node) {
 				$act='a'.$val;
 				$node=4;
@@ -50,45 +58,57 @@ class bApp {
 						$node=1;
 					} else {
 						//判定是ctr
-						$ctr='c'.$val;
+						if (strlen($val)>0) $ctr='c'.$val;
 						$node=3;
+						if (isset($ctrTable[$val]) && $ctrTable[$val]>$userLevel) {
+							$errorCode=403;
+							break;
+						}
 					}
 				} else {
-					$act='a'.$val;
+					if (strlen($val)>0) $act='a'.$val;
 					break;
 				}
 			}
 		}
-		$ctrFullName=$ctrNameSpace.$ctr;
+		if (1==$node && isset($ctrTable['']) && $ctrTable['']>$userLevel) {
+			$errorCode=403;
+		}
+		$ctrFullName=$ctr;
 		//echo '[route:dir="',$subDir,'" ctr="',$ctr,'" call="',$ctrFullName,'::',$act,'(',join(',',$actParam),')"]<hr size=1>',PHP_EOL;
 
-		if (!class_exists($ctrFullName) || !method_exists($ctrFullName,$act)) {
-			$ctrError='class or action '.$ctrFullName.'::'.$act.'() not found';
+		if (403==$errorCode) {
+			$ctrError='access denied';
 		} else {
-			$ctrError=null;
+			if (!class_exists($ctrFullName) || !method_exists($ctrFullName,$act)) {
+				$ctrError='class or action '.$ctrFullName.'::'.$act.'() not found';
+				$errorCode=404;
+			} else {
+				$ctrError=NULL;
+			}
 		}
 		if($ctrError) {
-			aHttp::error(['404',$ctrError]);
+			static::$httpClass::error([$errorCode,$ctrError]);
 		} else {
 			static::$ctrDir=$subDir;
-			static::$CTR=$ctr;
+			static::$ctrName=$ctr;
 			static::$fullCtr=$ctrFullName;
-			static::$ACT=$act;
+			static::$actName=$act;
 			try {
-				bCtr::startCatchEcho();
+				static::$ctrClass::startCatchEcho();
 				$ctrFullName::onLoad();
 				$ctrFullName::$act($actParam);
 				$ctrFullName::onEnd();
-				bCtr::endCatchEcho();
+				static::$ctrClass::endCatchEcho();
 				if (static::$autoTpl) {
-					aTpl::show();
+					static::$tplClass::show();
 				}
 			} catch (bError $error) {
-				bCtr::cleanCatch();
-				bTpl::$tplFile=AA_ROOT.'../buildin/sys/tpl/error';
-				bTpl::$data=['error'=>$error];
+				static::$ctrClass::cleanCatch();
+				static::$tplClass::$tplFile=AA_ROOT.'../buildin/sys/tpl/error';
+				static::$tplClass::put(['error'=>$error]);
 				if (static::$autoTpl) {
-					aTpl::show();
+					static::$tplClass::show();
 				}
 			}
 		}
