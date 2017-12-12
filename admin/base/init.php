@@ -3,8 +3,8 @@
 class aApp extends bApp {
 	public const name='管理系统';		//网站名
 	public static $httpClass='bHttp';
-	public static $ctrClass='bCtr';
-	public static $tplClass='bTpl';
+	public static $ctrClass='aCtr';
+	public static $tplClass='aTpl';
 	public static $errorClass='bError';
 	const prefixDir='/a';
 	const ctrTable=[

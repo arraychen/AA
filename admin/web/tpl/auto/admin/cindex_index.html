@@ -2,8 +2,9 @@
 <?php
 //bFun::printR($userList);
 $userList->headTpl='<tr><th>全选</th><th>头像</th><th>操作</th></tr>';
+$userList->emptyTpl='无数据';
 $userList->rowTpl='<tr><td><input type="checkbox" value="{id}" name="user[]"></td><td>{img}</td><td>查看 编辑 删除</td></tr>';
-$userList->table(['id','name']);
+$userList->table(['id','name','atime']);
 
 /*
      foreach($userList as $val) { ?>

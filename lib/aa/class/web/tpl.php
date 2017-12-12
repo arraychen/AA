@@ -21,29 +21,30 @@ function obi($file,&$var) {
 class bTpl {
 	public static $layout='pc';//
 	public static $type='html';//html, json, mobile, text
-	protected static $tplFile='';//常变
-	protected static $tplName='';//常变
+	public static $tplFile='';//常变
+	public static $tplName='';//常变
 	public static $data=[]; //必须通过方法设置
 	public static $block=[];
+	public static $nav=[]; //导航数组
 	public static function put($data,$tplName='') {
-		self::$data=$data+self::$data;
-		if($tplName)	self::$tplName=$tplName;
+		static::$data=$data+static::$data;
+		if($tplName)	static::$tplName=$tplName;
 	}
 	public static function show() {
-		if (self::$tplFile) self::$tplFile.='.html';
+		if (static::$tplFile) static::$tplFile.='.html';
 		else {
-			if(self::$tplName) {
-				 self::$tplFile=APP_ROOT.'web/tpl/page/'.strtolower(bApp::$ctrDir.self::$tplName).'.html';
+			if(static::$tplName) {
+				 static::$tplFile=APP_ROOT.'web/tpl/page/'.strtolower(bApp::$ctrDir.static::$tplName).'.html';
 			} else {
-				 self::$tplFile=APP_ROOT.'web/tpl/auto/'.strtolower(bApp::$ctrDir.bApp::$ctrName.'_'.bApp::$actName).'.html';
+				 static::$tplFile=APP_ROOT.'web/tpl/auto/'.strtolower(bApp::$ctrDir.bApp::$ctrName.'_'.bApp::$actName).'.html';
 			}
 		}
-		if(file_exists( self::$tplFile)) {
-			if (self::$layout) {
-				foreach (self::$data as $dataKey=>$dataVal) {
+		if(file_exists( static::$tplFile)) {
+			if (static::$layout) {
+				foreach (static::$data as $dataKey=>$dataVal) {
 					$$dataKey=$dataVal;
 				}
-				foreach (self::$block as $BlockKey=>$AATplBlockName) {
+				foreach (static::$block as $BlockKey=>$AATplBlockName) {
 					if(file_exists( APP_ROOT.'web/tpl/block/'.$AATplBlockName.'.html')) {
 					ob_start();
 					include APP_ROOT.'web/tpl/block/'.$AATplBlockName.'.html';
@@ -51,12 +52,12 @@ class bTpl {
 					}
 				}
 				ob_start();
-				include self::$tplFile;
+				include static::$tplFile;
 				$MAIN=ob_get_clean();
-				include APP_ROOT.'web/tpl/layout/'.self::$layout.'.html';
-			} else include self::$tplFile;
+				include APP_ROOT.'web/tpl/layout/'.static::$layout.'.html';
+			} else include static::$tplFile;
 		} else {
-			aApp::$httpClass::error(['404','tpl('.self::$tplFile.') not found']);
+			aApp::$httpClass::error(['404','tpl('.static::$tplFile.') not found']);
 		}
 	}
 	public static function layout($data) {

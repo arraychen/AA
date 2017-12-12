@@ -9,14 +9,15 @@ class bApp {
 
 	public const prefixDir='';		//ctr绝对子目录名
 	public const ctrTable=[];		//控制器表
+	public const name='AA模板系统';	//网站名
 	public static $config;			//配置信息
 	public static $ctrName;			//控制器
 	public static $fullCtr;			//控制器（含命名空间）
 	public static $actName;			//动作名
 	public static $ctrDir;			//动作目录
 	public static $echo;				//输出字符
-	public static $user;				//用户信息
-	public static $autoTpl=1;		//模板是否自动加载
+	public static $user;				//来访者信息
+	public static $autoTpl=1;		//是否自动加载模板并输出
 
 	public static function getConfig($item) {
 		return static::$config[$item];
@@ -87,7 +88,7 @@ class bApp {
 				$ctrError=NULL;
 			}
 		}
-		if($ctrError) {
+		if($errorCode) {
 			static::$httpClass::error([$errorCode,$ctrError]);
 		} else {
 			static::$ctrDir=$subDir;

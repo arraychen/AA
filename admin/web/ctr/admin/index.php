@@ -3,7 +3,7 @@
 class cIndex extends aCtr {
 	public static function onLoad() {
 		aTpl::$block=['menu'=>'menu','left'=>'left'];
-		aTpl::put(['title'=>'首页 '.aApp::name,'topMenu'=>[[1,'用户'],[2,'管理']],'leftMenu'=>[[1,'添加'],[2,'删除']]]);
+		aTpl::put(['title'=>'用户首页 '.aApp::name,'topMenu'=>[[1,'用户'],[2,'管理']],'leftMenu'=>[[1,'添加'],[2,'删除']]]);
 	}
 	public static function index() {
 		//$a=mUser::solo();

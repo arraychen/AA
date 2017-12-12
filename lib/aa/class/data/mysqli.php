@@ -94,7 +94,7 @@ class dMysqli extends bSql {
 			$this->dataBase=$config['database'];
 		} else {
 			$error=new bError($mysqli->connect_error);
-			$error->echo='连接数据库服务器超时(>1秒)';
+			$error->echo='连接服务器超时(>1秒)';
 			throw $error;
 		}
 	}
@@ -118,9 +118,9 @@ class dMysqli extends bSql {
 				$return->affectedRow=$this->dbi->affected_rows;
 			//bFun::printR($this->dbi);
 			} elseif(isset($result->num_rows)) {
+				$data=[];
 				$return->total=$result->num_rows;
 				if($result->num_rows>0) {
-					$data=[];
 					$return->page=ceil($result->num_rows/$this->limit);
 					while ($row=$result->fetch_array(MYSQLI_ASSOC)) {
 						$data[]=$row;

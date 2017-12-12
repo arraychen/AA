@@ -9,6 +9,7 @@ class bFun {
 		}
 	}
 	public static function varDump($var) {
-		var_dump($var);
+		echo $var[1];
+		//var_dump($var);
 	}
 }

@@ -147,6 +147,93 @@ class bData {
 		$this->driver->limit=(int)$limit;
 
 	}
+	static public function checkInputRule($Data,$state) {
+		$rule=[];
+		$allField=static::field;
+		if (isset(static::inputRule[''])) $rule=static::inputRule[''];
+		if (isset(static::inputRule[$state])) $rule=array_merge(static::inputRule[$state],$rule);
+		$mergeRule=[];
+		foreach ($rule as $val) {
+			$item=explode(',',$val[0]);
+			foreach ($item as $v) {
+				$field=trim($v);
+				if (isset($allField[$field])) {
+					$mergeRule[$field][$val[1]]=$val;
+				}
+			}
+		}
+		$error=[];
+		//print_r($mergeRule);
+		foreach ($mergeRule as $field => $value) {
+			foreach ($value as $ruleName=>$val) {
+				$tplVar=['field'=>$allField[$field][1]];
+				foreach ($val as $k => $v) {
+					if (is_string($k) && !is_array($v)) {
+						$tplVar[$k]=$v;
+					}
+				}
+				$errorTpl='';
+				switch ($ruleName) {
+					case '*':
+						if (!isset($Data[$field]) || strlen($Data[$field])<1) {
+							if(isset($val[2])) $errorTpl=$val[2];
+							else $errorTpl='{field}不能为空';
+						}
+						break;
+					case 'length':
+						if (!isset($Data[$field]) || (isset($val['max']) && strlen($Data[$field])>$val['max']) || (isset($val['min']) && strlen($Data[$field])<$val['min'])) {
+							if(isset($val[2])) $errorTpl=$val[2];
+							else $errorTpl='{field}长度不符合要求';
+						}
+						break;
+					case 'in':
+						if (!isset($Data[$field])||!isset($val['array']) || !in_array($Data[$field],$val['array'])) {
+							if(isset($val[2])) $errorTpl=$val[2];
+							else $errorTpl='{field}值不在选项内';
+						}
+						break;
+					case 'range':
+						if (!isset($Data[$field])|| !is_numeric($Data[$field]) || (isset($val['max']) && strlen($Data[$field])>$val['max']) || (isset($val['min']) && strlen($Data[$field])<$val['min'])) {
+							if(isset($val[2])) $errorTpl=$val[2];
+							else $errorTpl='{field}超出限定范围';
+						}
+						break;
+					case 'match':
+						if (!isset($Data[$field])|| (isset($val['preg']) && !preg_match($val['preg'],$Data[$field]))) {
+							if(isset($val[2])) $errorTpl=$val[2];
+							else $errorTpl='{field}不符合表达式';
+						}
+						break;
+					case 'url':
+						if (!isset($Data[$field]) || !preg_match('/^https?:\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i',$Data[$field])) {
+							if(isset($val[2])) $errorTpl=$val[2];
+							else $errorTpl='不是正确的网址';
+						}
+						break;
+					case 'email':
+						if (!isset($Data[$field])|| !preg_match('/^[^@]*<[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?>$/',$Data[$field])) {
+							if(isset($val[2])) $errorTpl=$val[2];
+							else $errorTpl='不是正确的电子邮件地址';
+						}
+						break;
+						default:
+							$class=get_called_class();
+							$method='check'.$ruleName;
+							if (!isset($Data[$field])|| !method_exists($class,$method)) {
+								$errorTpl='错误：检测方法不存在';
+							} else {
+								$errorTpl=$class::$method($val,$Data[$field]);
+							}
+				}
+				if ($errorTpl) {$error[$field]=bTpl::tr($errorTpl,$tplVar);}
+			}
+		}
+		return $error;
+	}
+	static public function checkRule($rule,$data) {
+
+	}
+
 
 }
 class bResult{

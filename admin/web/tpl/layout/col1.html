@@ -20,24 +20,13 @@
         word-break: break-all;
         word-wrap: break-word;
      }
+     .aform_error{border:1px solid red;background: gainsboro;color: red}
+     .aform_ok{color: green}
     </style>
 </head>
 <body>
-<table border="1" width="95%" cellspacing="0">
-  <tr><td colspan="2"><?=$Menu?></td></tr>
-  <tr><td width="200" valign="top"><?=$Left?></td><td><?=$MAIN?></td></tr>
-</table>
+<?=$MAIN?>
 <hr>
 版权所有@
-<div id="aa_foot" title="点击隐藏" onclick="if(this.style.height=='90px') this.style.height='600px';else
-	this.style.height='90px';"><?php
-echo aApp::$ctrClass::$echo,'<hr size=1>';
-foreach( aApp::$ctrClass::$info as $key =>$val ) {
-    echo '<b>',$key,'</b><br>';
-    foreach($val as $k=>$v) {
-      echo $k+1,' ',$v,'<br>';
-    }
-}
-?></div>
 </body>
 </html>

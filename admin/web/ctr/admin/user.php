@@ -8,4 +8,7 @@ class cUser extends aCtr {
 	public static function aLogin() {
 		echo '<hr><a>loginadmin';
 	}
+	public static function aLogout() {
+		echo '<hr><a>loginadmin';
+	}
 }

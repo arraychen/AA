@@ -4,6 +4,7 @@ class bList {
 	public $form;
 	public $headTpl;
 	public $rowTpl;
+	public $emptyTpl;
 	public function __construct($mod) {
 		$this->mod=$mod;
 	}
@@ -14,12 +15,13 @@ class bList {
 		if ($Col) {
 			foreach ($Col as $val) {
 				if (isset($this->mod::field[$val]))	$field[$val]=$this->mod::field[$val];
-				if (isset($this->mod::outRule['html'][$val]))	$field[$val]=$this->mod::outRule['html'][$val];
+				if (isset($this->mod::showRule['html'][$val]))	$field[$val]=$this->mod::showRule['html'][$val];
 			}
 		} else {
 			$field=$this->mod::field;
 		}
 		$data=$this->mod->get();
+		if(count($data->data)) {
 		echo '<table border=1 id="aa_blist_',$this->mod::table,'" class="aa_blist">';
 		if ($this->headTpl) {
 			echo bTpl::tr($this->headTpl,$field);
@@ -31,9 +33,9 @@ class bList {
 			echo '</tr>';
 		}
 		foreach ($data->data as $val) {
-			if (isset($this->mod::outRule['html'])) {
+			if (isset($this->mod::showRule['html'])) {
 				$vField=[];
-				foreach ($this->mod::outRule['html'] as $vKey => $outRule) {
+				foreach ($this->mod::showRule['html'] as $vKey => $outRule) {
 					$staticFun=$outRule[0];
 					$vField[$vKey]=$this->mod::$staticFun($val);
 				}
@@ -56,6 +58,9 @@ class bList {
 			}
 		}
 		echo '</table>';
+		} else {
+			echo $this->emptyTpl;
+		}
 	}
 	public function pager() {
 
