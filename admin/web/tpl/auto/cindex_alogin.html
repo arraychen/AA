@@ -6,11 +6,12 @@ $login->form();
 <table align="center" width="500">
 <tr><td><?php $login->title('name','帐号');?></td><td><?php $login->text('name');?></td><td><?php $login->label('name','请输入用户名');?></td></tr>
 <tr><td>密码</td><td><?php $login->text('pass');?></td><td><?php $login->label('pass','请输入密码');?></td></tr>
-<tr><td></td><td><?php $login->submit('login');?> <?php $login->submit('login2');?></td><td></td></tr>
+<tr><td></td><td><?php $login->submit('login3');?> <?php $login->submit('login2');?></td><td></td></tr>
+<tr><td></td><td><?php $login->result();?></td><td></td></tr>
 </table>
 <?php $login->end();?>
 
-管理员登录：
+管理登录：
 <?php
 $login2->form();
 ?>
@@ -19,6 +20,7 @@ $login2->form();
     <tr><td><?php $login2->title('name','帐号');?></td><td><?php $login2->text('name');?></td><td><?php $login2->label('name','请输入用户名');?></td></tr>
     <tr><td>密码</td><td><?php $login2->text('pass');?></td><td><?php $login2->label('name','请输入密码');?></td></tr>
     <tr><td></td><td><?php $login2->submit('adminlogin');?></td><td></td></tr>
+    <tr><td></td><td><?php $login2->result();?></td><td></td></tr>
 </table>
 <?php $login2->end();?>
 

@@ -12,6 +12,7 @@ class bForm {
 	public $data;
 	public $target;// self,blank,iframe,json
 	public $error;// html,iframe,json
+	public $result;// string
 	public function __construct($mod,$target='iframe') {
 		static::$count++;
 		$this->id=static::$count;
@@ -27,13 +28,23 @@ class bForm {
 			if (class_exists($mod) && method_exists($mod,$handler)) {
 				$this->error=$mod::checkInputRule($_POST['aform'.$this->md5][$this->id],$state);
 				if(!$this->error) {
-					$mod::$handler($_POST['aform'.$this->md5][$this->id]);
+					$this->result=$mod::$handler($_POST['aform'.$this->md5][$this->id]);
 				}
 			} else {
-
+				$this->result='无法处理请求（方法不存在）';
 			}
-			if ($this->target=='iframe'||$this->target=='json') {
-				print_r($this->error);
+			if ($this->target=='iframe'){
+				echo '<script language="JavaScript">';
+				if ($this->error) {
+					foreach ($this->error as $key=>$val) {
+						echo 'parent.document.getElementById("aform',$this->id,'_',$key,'").className="aform_error";parent.document.getElementById("aform',$this->id,'_label_',$key,'").className="aform_error";parent.document.getElementById("aform',$this->id,'_label_',$key,'").innerHTML="',$val,'";';
+					}
+				}
+				if ($this->result) echo 'parent.document.getElementById("aform',$this->id,'_result").innerHTML="',htmlspecialchars($this->result),'";';
+				echo '</script>';
+				die;
+			}elseif ($this->target=='json') {
+				echo json_encode(['error'=>$this->error,'result'=>$this->result]);
 				die;
 			} else {
 				$this->data=$_POST['aform'.$this->md5][$this->id];
@@ -142,6 +153,9 @@ class bForm {
 	}
 	public function title($name,$text,$html='') {
 		echo '<label id="aform',$this->id,'_title_',$name,'" for="aform',$this->id,'_',$name,'"',$html,'>',$text,'</label>';
+	}
+	public function result() {
+		echo '<div id="aform',$this->id,'_result" class="afrom_result">',$this->result,'</div>';
 	}
 	public function end() {
 		echo '</form>';

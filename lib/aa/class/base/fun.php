@@ -12,4 +12,8 @@ class bFun {
 		echo $var[1];
 		//var_dump($var);
 	}
+	public static function js($var) {
+		return str_replace(['\\','""',"\n"],['\\\\','\\""','<br>'],$var);
+		//var_dump($var);
+	}
 }

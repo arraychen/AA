@@ -20,7 +20,8 @@ class mLogin extends bData {
 	public const outRule=[
 	];
 	public static function submitLogin($data) {
-		print_r($data);
+//		print_r($data);
+		return '接受请求处理成功！';
 	}
 	public static function submitLogin2($data) {
 		echo 2;
