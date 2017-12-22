@@ -6,6 +6,7 @@ class aApp extends bApp {
 	public static $ctrClass='aCtr';
 	public static $tplClass='aTpl';
 	public static $errorClass='bError';
+	public static $userClass='bUser';
 	const prefixDir='/a';
 	const ctrTable=[
 		''=>0,

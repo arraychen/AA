@@ -11,7 +11,7 @@ class mLogin extends bData {
 	public const inputRule=[
 		//''=>[['name','*','{field}不能为空']],
 		'login'=>[
-			//['name,pass','*','{field}不能为空'],
+			['name,pass','*','{field}不能为空'],
 			['name','url'],
 		],
 	];

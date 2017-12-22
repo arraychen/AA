@@ -231,18 +231,15 @@ class bData {
 		return $error;
 	}
 	static public function checkRule($rule,$data) {
-
 	}
-
 
 }
 class bResult{
-	public $page=0;			//页数
+	public $page=0;			//第几页
 	public $total=0;		//总数
 	public $limit=20;		//每页数量
 	public $offset=0;			//偏移量
 	public $data=[];			//数据
-	public $count=0;			//数据总数
 	public $affectedRow;	//返回数据
 	public $autoId;				//自增编号
 }

@@ -6,6 +6,7 @@ class bApp {
 	public static $tplClass='bTpl';			//基础类名，可继承扩展
 	public static $errorClass='bError';	//基础类名，可继承扩展
 	public static $funClass='bFun';	//基础类名，可继承扩展
+	public static $userClass='bUser';
 
 	public const prefixDir='';		//ctr绝对子目录名
 	public const ctrTable=[];		//控制器表
@@ -16,7 +17,7 @@ class bApp {
 	public static $actName;			//动作名
 	public static $ctrDir;			//动作目录
 	public static $echo;				//输出字符
-	public static $user;				//来访者信息
+	public static $user;				//访问者信息
 	public static $autoTpl=1;		//是否自动加载模板并输出
 
 	public static function getConfig($item) {
@@ -39,7 +40,7 @@ class bApp {
 		$tmp=explode('/',$tmp[0]);
 		unset($tmp[0]);
 		$errorCode=0;
-		$userLevel=static::$user['level']??static::$user['level']??0; //0=默认匿名 1 2 3 4 高更层级
+		//$userLevel=static::$user['level']??static::$user['level']??0; //0=默认匿名 1 2 3 4 高更层级
 		$node=0; // 0=root,1=dir,2=ctr,3=act,4=param
 		$ctrTable=static::ctrTable;
 		foreach ($tmp as $val) {
@@ -61,7 +62,14 @@ class bApp {
 						//判定是ctr
 						if (strlen($val)>0) $ctr='c'.$val;
 						$node=3;
-						if (isset($ctrTable[$val]) && $ctrTable[$val]>$userLevel) {
+						if (isset($ctrTable[$val])) {
+							if ($ctrTable[$val]>0) {
+								aApp::$userClass::checkUserLogin();
+								if ($ctrTable[$val]>static::$user['level'])
+								$errorCode=403;
+								break;
+							}
+						} else {
 							$errorCode=403;
 							break;
 						}
@@ -72,8 +80,9 @@ class bApp {
 				}
 			}
 		}
-		if (1==$node && isset($ctrTable['']) && $ctrTable['']>$userLevel) {
-			$errorCode=403;
+		if (1==$node && $ctrTable['']>0) {
+			aApp::$userClass::checkUserLogin();
+			if ($ctrTable['']>static::$user['level']) $errorCode=403;
 		}
 		$ctrFullName=$ctr;
 		//echo '[route:dir="',$subDir,'" ctr="',$ctr,'" call="',$ctrFullName,'::',$act,'(',join(',',$actParam),')"]<hr size=1>',PHP_EOL;

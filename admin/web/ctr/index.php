@@ -17,7 +17,7 @@ class cIndex extends aCtr {
 	}
 	public static function aLogin() {
 		aTpl::$layout='col1';
-		aTpl::put(['title'=>'登录','login'=>new bForm('mLogin'),'login2'=>new bForm('mLogin')]);
+		aTpl::put(['title'=>'登录','login'=>new bForm('mUser'),'login2'=>new bForm('mUser')]);
 	}
 	public static function aTest() {
 		//$a=mUser::solo();

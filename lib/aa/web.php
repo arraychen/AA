@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Created by PhpStorm.
+ * User: Administrator
+ * Date: 2017-12-21
+ * Time: 16:16
+ */
 class aWeb {
 	public static function run($appDir,$configFile='') {
 		define('AA_ROOT',__DIR__.'/class/');
@@ -29,6 +34,7 @@ class aWeb {
 					'bfun'	=>'base/fun',
 					'bctr'	=>'base/ctr',
 					'btpl'	=>'web/tpl',
+					'buser'	=>'web/user',
 					'bhttp'	=>'web/http',
 					'blist'	=>'web/list',
 					'bform'	=>'web/form',
