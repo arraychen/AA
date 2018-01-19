@@ -10,7 +10,6 @@ class bUser {
 	public const logoutUrl='/logout';
 	public const sessionName='aaUser'; //file,db,redis
 	public const cookieName='aaUser'; //file,db,redis
-	public const mod='mUser'; //帐号模型
 	public static function passWord($userName,$passWord,$salt='') {
 		return md5(aApp::name.'_'.$userName.'_'.$passWord.'_'.$salt);
 	}
@@ -18,24 +17,26 @@ class bUser {
 		return sha1(aApp::name.'_'.$userName.'_'.$passWord.'_'.$salt);
 	}
 	public static function checkUserLogin() {
+		session_start();
 		if(isset($_SESSION[static::sessionName])) {
 			aApp::$user=$_SESSION[static::sessionName];
 			return true;
 		} elseif (isset($_COOKIE[static::cookieName])) {
 			return true;
 		} else {
-			aApp::$user=['level'=>0,'id'=>0,'groupid'=>0,'name'=>''];
+			aApp::$user=[];
 			return false;
 		}
-
 	}
 	public static function login($data) {
+		session_start();
 		$_SESSION[static::sessionName]=$data;
 		aApp::$user=$data;
 	}
 	public static function logout() {
+		session_start();
 		$_SESSION[static::sessionName]=null;
-		setcookie(static::cookieName,0);
+		//setcookie(static::cookieName,0);
 		aApp::$user=null;
 	}
 	public static function remember($second) {

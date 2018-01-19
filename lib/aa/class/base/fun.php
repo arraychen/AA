@@ -9,8 +9,8 @@ class bFun {
 		}
 	}
 	public static function varDump($var) {
-		echo $var[1];
-		//var_dump($var);
+		//echo $var[1];
+		var_dump($var);
 	}
 	public static function js($var) {
 		return str_replace(['\\','""',"\n"],['\\\\','\\""','<br>'],$var);

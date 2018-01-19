@@ -3,7 +3,8 @@
 class cIndex extends aCtr {
 	public static function onLoad() {
 		aTpl::$block=['menu'=>'menu','left'=>'left'];
-		aTpl::put(['title'=>'用户首页 '.aApp::name,'topMenu'=>[[1,'用户'],[2,'管理']],'leftMenu'=>[[1,'添加'],[2,'删除']]]);
+		aTpl::put(['title'=>'首页 '.aApp::name,'topMenu'=>[['/','首页'],['/a/admin','配置'],['/a/user/logout','退出']],
+		'leftMenu'=>[['/a/admin/acl/add','添加'],['/a/admin/acl/','列表']]]);
 	}
 	public static function index() {
 		//$a=mUser::solo();
@@ -30,9 +31,6 @@ class cIndex extends aCtr {
 		//$a=mUser::mod()->query('select * from user WHERE %s>%s',[[COL,'id'],[NUM,1]]);
 		aTpl::put(['userList'=>$userList]);
 		//bTpl::show('aaa');
-	}
-	public static function aLogin() {
-		echo 'login';
 	}
 	public static function aTest() {
 		echo 'test';

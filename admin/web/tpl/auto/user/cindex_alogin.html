@@ -1,0 +1,27 @@
+<?php
+$login->rowTpl='<tr><td>{title}</td><td>{input}</td><td>{desc}</td></tr>';
+$login->form();
+?>
+帐号登录：
+<table align="center" width="500">
+<tr><td><?php $login->title('name');?></td><td><?php $login->text('name');?></td><td><?php $login->label('name','请输入用户名');?></td></tr>
+<tr><td><?php $login->title('pass');?></td><td><?php $login->text('pass');?></td><td><?php $login->label('pass','请输入密码');?></td></tr>
+<tr><td></td><td><?php $login->submit('login');?> <?php $login->submit('login2');?></td><td></td></tr>
+<tr><td></td><td><?php $login->result();?></td><td></td></tr>
+</table>
+<?php $login->end();?>
+
+管理登录：
+<?php
+$login2->form();
+?>
+
+帐号登录：
+<table align="center" width="500">
+    <tr><td><?php $login2->title('name');?></td><td><?php $login2->text('name');?></td><td><?php $login2->label('name','请输入用户名');?></td></tr>
+    <tr><td>密码</td><td><?php $login2->text('pass');?></td><td><?php $login2->label('name','请输入密码');?></td></tr>
+    <tr><td></td><td><?php $login2->submit('adminlogin');?></td><td></td></tr>
+    <tr><td></td><td><?php $login2->result();?></td><td></td></tr>
+</table>
+<?php $login2->end();?>
+

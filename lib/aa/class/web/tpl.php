@@ -23,10 +23,11 @@ class bTpl {
 	public static $type='html';//html, json, mobile, text
 	public static $tplFile='';//常变
 	public static $tplName='';//常变
+	public static $autoTpl=1;		//是否自动加载模板并输出
 	public static $data=[]; //必须通过方法设置
 	public static $block=[];
 	public static $nav=[]; //导航数组
-	public static function put($data,$tplName='') {
+	public static function set($data,$tplName='') {
 		static::$data=$data+static::$data;
 		if($tplName)	static::$tplName=$tplName;
 	}

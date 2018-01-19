@@ -109,9 +109,10 @@ class dMysqli extends bSql {
 		if ($Bind) {
 			$Sql=self::exp($Sql,$Bind);
 		}
+		//echo $Sql,'<br>';
 		bCtr::$info['SQL'][]=__LINE__.':'.$this->dataBase.':'.$Sql;
 		if($result=$this->dbi->query($Sql)) {
-//			bFun::varDump($result);
+			//bFun::varDump($result);
 			$return=new bResult();
 			if ($this->dbi->insert_id) {
 				$return->autoId=$this->dbi->insert_id;

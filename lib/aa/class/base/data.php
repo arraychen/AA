@@ -58,7 +58,7 @@ class bData {
 			$this->driver=self::$allConnect[$serverTag];
 		}
 	}
-		public function query($Tpl,$Bind) {
+	public function query($Tpl,$Bind=[]) {
 		return $this->driver->query($Tpl,$Bind);
 	}
 	public function get($Parm=[]) {

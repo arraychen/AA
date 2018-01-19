@@ -1,7 +1,13 @@
 <?php
 class bCtr {
+	public static $request;
 	public static $echo;
 	public static $info=[];
+	public static $ro=0; //只读
+	const prefixDir='/a';
+	const ctrTable=[
+		''=>0
+	];
 	public static function onLoad() {}
 	public static function onEnd() {}
 

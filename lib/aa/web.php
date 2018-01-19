@@ -32,7 +32,7 @@ class aWeb {
 					'bsql'	=>'base/sql',
 					'bcache'=>'base/cache',
 					'bfun'	=>'base/fun',
-					'bctr'	=>'base/ctr',
+					'bctr'	=>'web/ctr',
 					'btpl'	=>'web/tpl',
 					'buser'	=>'web/user',
 					'bhttp'	=>'web/http',

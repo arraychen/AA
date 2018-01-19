@@ -33,7 +33,7 @@ class bForm {
 					$this->result=$mod::$handler($_POST['aform'.$this->md5][$this->id]);
 				}
 			} else {
-				$this->result=[0,'无法处理请求（方法不存在）'];
+				$this->result=[0,'无法处理请求（'.$mod.':'.$handler.'方法不存在）'];
 			}
 			if ($this->target=='iframe'){
 				echo '<script language="JavaScript">';
