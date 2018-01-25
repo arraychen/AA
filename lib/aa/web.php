@@ -33,6 +33,7 @@ class aWeb {
 					'bcache'=>'base/cache',
 					'bfun'	=>'base/fun',
 					'bctr'	=>'web/ctr',
+					'bacl'	=>'web/acl',
 					'btpl'	=>'web/tpl',
 					'buser'	=>'web/user',
 					'bhttp'	=>'web/http',

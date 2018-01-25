@@ -79,11 +79,12 @@ class bApp {
 			}
 		}
 		aApp::$ctrDir=$subDir;
+		if (isset($ctrTable[''])) {
 		if ((1==$node && $ctrTable['']>0) || $acl) {
 			aApp::$userClass::checkUserLogin();
 			if (empty(aApp::$user['level']) || $ctrTable['']>aApp::$user['level']) $errorCode=403;
 			if(aCtr::$aclClass::acl($subDir.$ctr.':'.$act)) $errorCode=403;
-		}
+		} } else $errorCode=403;
 
 		$ctrFullName=$ctr;
 		//echo '[route:dir="',$subDir,'" ctr="',$ctr,'" call="',$ctrFullName,'::',$act,'(',join(',',$actParam),')"]<hr size=1>',PHP_EOL;
@@ -92,7 +93,7 @@ class bApp {
 			$ctrError='access denied';
 		} else {
 			if (!class_exists($ctrFullName) || !method_exists($ctrFullName,$act)) {
-				$ctrError='class or action '.aApp::$ctrDir.$ctrFullName.'::'.$act.'() not found';
+				$ctrError='class or action '.$ctrFullName.'::'.$act.'() not found';
 				$errorCode=404;
 			} else {
 				$ctrError=NULL;
@@ -102,13 +103,13 @@ class bApp {
 			aApp::$httpClass::error([$errorCode,$ctrError]);
 		} else {
 			aApp::$ctrName=$ctr;
-			aApp::$fullCtr=$ctrFullName;
+			aApp::$fullCtr=$subDir.$ctrFullName;
 			aApp::$actName=$act;
 			try {
 				aApp::$ctrClass::startCatchEcho();
-				$ctrFullName::onLoad();
-				$ctrFullName::$act($actParam);
-				$ctrFullName::onEnd();
+				$ctr::onLoad();
+				$ctr::$act($actParam);
+				$ctr::onEnd();
 				aApp::$ctrClass::endCatchEcho();
 				if (aApp::$tplClass::$autoTpl) {
 					aApp::$tplClass::show();

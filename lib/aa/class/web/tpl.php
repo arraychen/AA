@@ -24,6 +24,7 @@ class bTpl {
 	public static $tplFile='';//常变
 	public static $tplName='';//常变
 	public static $autoTpl=1;		//是否自动加载模板并输出
+	public static $showed=0;		//是否已输出
 	public static $data=[]; //必须通过方法设置
 	public static $block=[];
 	public static $nav=[]; //导航数组
@@ -32,12 +33,19 @@ class bTpl {
 		if($tplName)	static::$tplName=$tplName;
 	}
 	public static function show() {
-		if (static::$tplFile) static::$tplFile.='.html';
+		if (static::$showed) return;
+		else static::$showed=1;
+
+		if (static::$tplFile) {if(substr(static::$tplFile,-5)!='.html') static::$tplFile.='.html';}
 		else {
 			if(static::$tplName) {
 				 static::$tplFile=APP_ROOT.'web/tpl/page/'.strtolower(bApp::$ctrDir.static::$tplName).'.html';
 			} else {
-				 static::$tplFile=APP_ROOT.'web/tpl/auto/'.strtolower(bApp::$ctrDir.bApp::$ctrName.'_'.bApp::$actName).'.html';
+				if (static::$autoTpl) {
+				 	static::$tplFile=APP_ROOT.'web/tpl/auto/'.strtolower(bApp::$ctrDir.bApp::$ctrName.'_'.bApp::$actName).'.html';
+				} else {
+					static::$tplFile='';
+				}
 			}
 		}
 		if(file_exists( static::$tplFile)) {
@@ -52,9 +60,11 @@ class bTpl {
 					${ucfirst($BlockKey)}=ob_get_clean();
 					}
 				}
-				ob_start();
-				include static::$tplFile;
-				$MAIN=ob_get_clean();
+				if (static::$tplFile) {
+					ob_start();
+					include static::$tplFile;
+					$MAIN=ob_get_clean();
+				} else $MAIN='';
 				include APP_ROOT.'web/tpl/layout/'.static::$layout.'.html';
 			} else include static::$tplFile;
 		} else {

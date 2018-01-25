@@ -4,6 +4,11 @@
     <title><?=$title?> <?=aApp::name?></title>
     <style>
      * {font-size: 14px}
+     li {
+         list-style-type: none;
+         margin: 4px;
+         padding: 0;
+     }
      p,pre{
 		white-space: pre-wrap!important;
         word-wrap: break-word!important;
@@ -23,9 +28,9 @@
     </style>
 </head>
 <body>
-<table border="1" width="95%" cellspacing="0">
+<table border="1" width="95%" cellspacing="0" style="border-collapse: collapse;border-color: #DDD">
   <tr><td colspan="2"><?=$Menu?></td></tr>
-  <tr><td width="200" valign="top"><?=$Left?></td><td><?=$MAIN?></td></tr>
+  <tr><td width="150" valign="top"><?=$Left?></td><td><?=$MAIN?></td></tr>
 </table>
 <hr>
 版权所有@

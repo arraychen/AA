@@ -1,11 +1,7 @@
 <?php
 
 class cIndex extends aCtr {
-	public static function onLoad() {
-		aTpl::$block=['menu'=>'menu','left'=>'left'];
-		aTpl::set(['title'=>'网站首页 ','topMenu'=>aCtr::$aclClass::menu(),'leftMenu'=>[[1,'添加'],[2,'删除']]]);
-	}
-	public static function index() {
+	public static function index() { //首页
 		$user=mUser::mod();
 		//$u->offset('aa',2);
 		//$a=$u->set(['age'=>30,'name'=>'姓名aaaaa','atime'=>bexp('now()')],1);

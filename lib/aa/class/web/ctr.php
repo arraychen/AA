@@ -1,9 +1,10 @@
 <?php
 class bCtr {
+	public static $aclClass='bAcl';
 	public static $request;
 	public static $echo;
 	public static $info=[];
-	public static $ro=0; //只读
+	public static $readOnly=0; //只读
 	const prefixDir='/a';
 	const ctrTable=[
 		''=>0
