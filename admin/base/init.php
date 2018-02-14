@@ -11,11 +11,11 @@ class aCtr extends bCtr {
 	const prefixDir='/a';
 	const ctrTable=[
 		''=>1,
-		'admin'	=>[''=>1,'user'=>1,'group'=>1,'acl'=>1,'config'=>1,'update'=>1,'dev'=>['test'=>1]],
+		'admin'	=>[''=>1,'user'=>1,'role'=>1,'acl'=>1,'config'=>1,'update'=>1,'dev'=>['test'=>1]],
 		'user'	=>[''=>0],
 	];
 	public static function onLoad() {
-		aTpl::set(['title'=>'网站首页 ','menu'=>aCtr::$aclClass::menu(),'leftMenu'=>[[1,'添加'],[2,'删除']]]);
+		aTpl::set(['menu'=>aCtr::$aclClass::menu(),'leftMenu'=>[[1,'添加'],[2,'删除']]]);
 	}
 	public static function onEnd() {
 		static::$info['加载文件']=get_included_files();

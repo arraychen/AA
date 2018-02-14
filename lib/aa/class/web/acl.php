@@ -49,12 +49,15 @@ class bAcl extends bData {
 	}
 
 	public static function menu() {
-		$res=self::mod()->query('select a.func from acl_funcaction a LEFT JOIN acl_action b ON b.id=a.act WHERE b.path=%s limit 1',[[STR,aApp::$fullCtr.':'.aApp::$actName]]);
-		if ($res->total<1) $funcId=0;
-		else {
+		$res=self::mod()->query('select a.func,b.name from acl_funcaction a LEFT JOIN acl_action b ON b.id=a.act WHERE b.path=%s limit 1',[[STR,aApp::$fullCtr.':'.aApp::$actName]]);
+		if ($res->total<1) {
+			$funcId=0;
+			$actName='';
+		} else {
 			$funcId=$res->data[0]['func'];
+			$actName=$res->data[0]['name'];
 		}
-		$menu=[[],[]];
+		$menu=[[],[],$actName];
 		$res=self::mod()->query('select c.pid,c.path,c.name from acl_roleuser a LEFT JOIN acl_access b ON (a.role=b.role) LEFT JOIN acl_func c ON c.id=b.func WHERE a.user=%s AND (a.timelimit=0 OR (a.timelimit=1 AND a.etime>now())) AND (c.pid=0 or c.pid=%s)',[[NUM,aApp::$user['id']],[NUM,$funcId]]);
 		if ($res->total<1) return 1;
 		else {

@@ -65,7 +65,6 @@ class bApp {
 						if (isset($ctrTable[$val])) {
 							if ($ctrTable[$val]>0) {
 								$acl=1;
-								break;
 							}
 						} else {
 							$errorCode=403;
@@ -111,16 +110,12 @@ class bApp {
 				$ctr::$act($actParam);
 				$ctr::onEnd();
 				aApp::$ctrClass::endCatchEcho();
-				if (aApp::$tplClass::$autoTpl) {
-					aApp::$tplClass::show();
-				}
+				aApp::$tplClass::show();
 			} catch (bError $error) {
 				aApp::$ctrClass::cleanCatch();
 				aApp::$tplClass::$tplFile=AA_ROOT.'../buildin/sys/tpl/error';
-				aApp::$tplClass::put(['error'=>$error]);
-				if (aApp::$tplClass::$autoTpl) {
-					aApp::$tplClass::show();
-				}
+				aApp::$tplClass::set(['error'=>$error]);
+				aApp::$tplClass::show();
 			}
 		}
 	}

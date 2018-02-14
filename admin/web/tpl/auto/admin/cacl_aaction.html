@@ -1,0 +1,14 @@
+动作列表:
+<?php
+$list->headTpl='<tr><th>全选</th><th>名称</th><th>路径</th><th>操作</th></tr>';
+$list->emptyTpl='无数据';
+$list->rowTpl='<tr><td><input type="checkbox" value="{id}" name="id[]"></td><td>{name}</td><td>{path}</td><td>编辑 删除</td></tr>';
+$list->table(['id','name','path']);
+
+/*
+foreach($userList as $val) { ?>
+<a href="<?=$val['id']?>"><?=$val['name']?></a>
+<?php }
+*/
+?>
+

@@ -1,7 +1,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title><?=$title?> <?=aApp::name?></title>
+    <title><?=$menu[2]?> <?=aApp::name?></title>
     <style>
      * {font-size: 14px}
      li {
@@ -25,10 +25,11 @@
         word-break: break-all;
         word-wrap: break-word;
      }
+     table,td,th {border-collapse: collapse;border:1px solid gainsboro}
     </style>
 </head>
 <body>
-<table border="1" width="95%" cellspacing="0" style="border-collapse: collapse;border-color: #DDD">
+<table width="95%" cellspacing="0">
   <tr><td colspan="2"><?=$Menu?></td></tr>
   <tr><td width="150" valign="top"><?=$Left?></td><td><?=$MAIN?></td></tr>
 </table>

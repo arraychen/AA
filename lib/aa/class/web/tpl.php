@@ -24,7 +24,6 @@ class bTpl {
 	public static $tplFile='';//常变
 	public static $tplName='';//常变
 	public static $autoTpl=1;		//是否自动加载模板并输出
-	public static $showed=0;		//是否已输出
 	public static $data=[]; //必须通过方法设置
 	public static $block=[];
 	public static $nav=[]; //导航数组
@@ -33,42 +32,41 @@ class bTpl {
 		if($tplName)	static::$tplName=$tplName;
 	}
 	public static function show() {
-		if (static::$showed) return;
-		else static::$showed=1;
-
-		if (static::$tplFile) {if(substr(static::$tplFile,-5)!='.html') static::$tplFile.='.html';}
-		else {
-			if(static::$tplName) {
-				 static::$tplFile=APP_ROOT.'web/tpl/page/'.strtolower(bApp::$ctrDir.static::$tplName).'.html';
-			} else {
-				if (static::$autoTpl) {
-				 	static::$tplFile=APP_ROOT.'web/tpl/auto/'.strtolower(bApp::$ctrDir.bApp::$ctrName.'_'.bApp::$actName).'.html';
-				} else {
-					static::$tplFile='';
-				}
-			}
+		if(static::$tplFile){
+			if(substr(static::$tplFile,-5)!='.html') static::$tplFile.='.html';
+		}elseif(static::$tplName) {
+			static::$tplFile=APP_ROOT.'web/tpl/page/'.strtolower(bApp::$ctrDir.static::$tplName).'.html';
+		}elseif (static::$autoTpl) {
+			static::$tplFile=APP_ROOT.'web/tpl/auto/'.strtolower(bApp::$ctrDir.bApp::$ctrName.'_'.bApp::$actName).'.html';
+		} else {
+			static::$tplFile='';
 		}
-		if(file_exists( static::$tplFile)) {
-			if (static::$layout) {
-				foreach (static::$data as $dataKey=>$dataVal) {
-					$$dataKey=$dataVal;
-				}
-				foreach (static::$block as $BlockKey=>$AATplBlockName) {
-					if(file_exists( APP_ROOT.'web/tpl/block/'.$AATplBlockName.'.html')) {
-					ob_start();
-					include APP_ROOT.'web/tpl/block/'.$AATplBlockName.'.html';
-					${ucfirst($BlockKey)}=ob_get_clean();
-					}
-				}
-				if (static::$tplFile) {
+		foreach (static::$data as $dataKey=>$dataVal) {
+			$$dataKey=$dataVal;
+		}
+		if (static::$layout) {
+			$MAIN='';
+			if (static::$tplFile) {
+				if(file_exists( static::$tplFile)) {
 					ob_start();
 					include static::$tplFile;
 					$MAIN=ob_get_clean();
-				} else $MAIN='';
-				include APP_ROOT.'web/tpl/layout/'.static::$layout.'.html';
-			} else include static::$tplFile;
+				} else {
+					$error=new aApp::$errorClass('tpl('.static::$tplFile.') not found');
+					$error->echo='找不到模板文件';
+					throw $error;
+				}
+			}
+			foreach (static::$block as $AATplBlockKey=>$AATplBlockName) {
+				if(file_exists( APP_ROOT.'web/tpl/block/'.$AATplBlockName.'.html')) {
+				ob_start();
+				include APP_ROOT.'web/tpl/block/'.$AATplBlockName.'.html';
+				${ucfirst($AATplBlockKey)}=ob_get_clean();
+				}
+			}
+			include APP_ROOT.'web/tpl/layout/'.static::$layout.'.html';
 		} else {
-			aApp::$httpClass::error(['404','tpl('.static::$tplFile.') not found']);
+			include static::$tplFile;
 		}
 	}
 	public static function layout($data) {
